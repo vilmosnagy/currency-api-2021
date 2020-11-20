@@ -80,11 +80,11 @@ async function begin() {
     //launch the browser
     await launchBrowser()
     // Get bing currency values
-    let bingCurrObj = await getBingCurrencies()
-    console.log("bingvalu is ", bingCurrObj)
-
+  //  let bingCurrObj = await getBingCurrencies()
+  //  console.log("bingvalu is ", bingCurrObj)
+await test()
       // close the browser when everything is done
-  await browser.close();
+//  await browser.close();
 }
 
 
@@ -94,4 +94,49 @@ async function begin() {
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 function getRandomNo(max) {
     return Math.floor(Math.random() * Math.floor(max));
+}
+
+
+
+async function test(){
+    let link = "https://google.com/search?q=1+usd+to+eur"
+    await page.goto(link, {
+        timeout: 60000
+    })
+    await page.evaluate(() => document.querySelectorAll('select')[1].setAttribute("id","myeditedcurrselector"))
+
+        // Stores the currencies in curr:val format : eg : inr:70.1
+        let currObj = {}
+    
+        let currLen = await page.evaluate(() =>  document.getElementById('myeditedcurrselector').children.length)
+    console.log("currlen ",currLen)
+
+    for (let i = 0; i < currLen; i++) {
+        // Wait for few random seconds
+        let randomWaitTime = 3000
+        await new Promise(r => setTimeout(r, getRandomNo(randomWaitTime)));
+
+        await page.evaluate(() => document.querySelectorAll('select')[1].setAttribute("id","myeditedcurrselector"))
+    
+
+
+await page.evaluate(() =>  document.querySelector('[data-exchange-rate]').remove())
+
+await page.selectOption('#myeditedcurrselector', {index : i });
+
+
+
+    await page.waitForSelector('[data-exchange-rate]', { state: 'attached' });
+
+let currVal = await page.evaluate(() =>  document.querySelector('[data-exchange-rate]').getAttribute("data-exchange-rate"))
+console.log("currval ",currVal)
+
+let currName = await page.evaluate(i => document.querySelectorAll('select')[1][i].textContent,i)
+console.log("currname ",currName)
+currObj[currName.toLowerCase()] = parseFloat(currVal)
+    }
+
+
+
+console.log(currObj)
 }
