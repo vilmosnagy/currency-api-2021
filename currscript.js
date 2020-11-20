@@ -64,7 +64,7 @@ async function getBingCurrencies() {
         // await page.waitForSelector('#cc_tv', { state: 'attached' });
         //let currVal = await page.evaluate(() => document.getElementById('cc_tv').getAttribute("value"))
 
-        currObj[currName] = parseFloat(currVal)
+        currObj[currName.toLowerCase()] = parseFloat(currVal)
         console.log('currName is ', currName)
         console.log('currVal is ', currVal)
     }
