@@ -80,11 +80,12 @@ async function begin() {
     //launch the browser
     await launchBrowser()
     // Get bing currency values
-  //  let bingCurrObj = await getBingCurrencies()
-  //  console.log("bingvalu is ", bingCurrObj)
-await test()
-      // close the browser when everything is done
-//  await browser.close();
+    //  let bingCurrObj = await getBingCurrencies()
+    //  console.log("bingvalu is ", bingCurrObj)
+    let googCurrObj = await getGoogCurrencies()
+    console.log(googCurrObj)
+    // close the browser when everything is done
+    await browser.close();
 }
 
 
@@ -93,50 +94,52 @@ await test()
 // Returns random number, generates random less than the input argument
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 function getRandomNo(max) {
-    return Math.floor(Math.random() * Math.floor(max));
+    return Math.floor(Math.random() * Math.floor(max))
 }
 
 
 
-async function test(){
+async function getGoogCurrencies() {
+
     let link = "https://google.com/search?q=1+usd+to+eur"
     await page.goto(link, {
         timeout: 60000
     })
-    await page.evaluate(() => document.querySelectorAll('select')[1].setAttribute("id","myeditedcurrselector"))
 
-        // Stores the currencies in curr:val format : eg : inr:70.1
-        let currObj = {}
-    
-        let currLen = await page.evaluate(() =>  document.getElementById('myeditedcurrselector').children.length)
-    console.log("currlen ",currLen)
+    let uniqueSelectID = 'mySelectElem133'
+    // Set unique id to second selector, so that I can easily access it using id
+    await page.evaluate(uniqueSelectID => document.querySelectorAll('select')[1].setAttribute('id', uniqueSelectID), uniqueSelectID)
+
+    // Stores the currencies in currencyName:val format : eg : indian rupee:70.1
+    let currObj = {}
+    // Stores number of currencies in bing dropdown
+    let currLen = await page.evaluate(uniqueSelectID => document.getElementById(uniqueSelectID).children.length, uniqueSelectID)
 
     for (let i = 0; i < currLen; i++) {
         // Wait for few random seconds
         let randomWaitTime = 3000
         await new Promise(r => setTimeout(r, getRandomNo(randomWaitTime)));
+        // Set unique id to second selector, so that I can easily access it using id
+        await page.evaluate(uniqueSelectID => document.querySelectorAll('select')[1].setAttribute('id', uniqueSelectID), uniqueSelectID)
 
-        await page.evaluate(() => document.querySelectorAll('select')[1].setAttribute("id","myeditedcurrselector"))
-    
+        // Remove the element containing the currency rate, so that we can wait for that element after selecting new currency
+
+        await page.evaluate(() => document.querySelector('[data-exchange-rate]').remove())
+        // Select the currency from dropdown
+        await page.selectOption('#' + uniqueSelectID, { index: i });
 
 
-await page.evaluate(() =>  document.querySelector('[data-exchange-rate]').remove())
+        // wait for currency value to come
+        await page.waitForSelector('[data-exchange-rate]', { state: 'attached' });
+        // Get currency value
+        let currVal = await page.evaluate(() => document.querySelector('[data-exchange-rate]').getAttribute("data-exchange-rate"))
 
-await page.selectOption('#myeditedcurrselector', {index : i });
+        // Get currency name i.e Indian Rupee etc
+        let currName = await page.evaluate(i => document.querySelectorAll('select')[1][i].textContent, i)
 
-
-
-    await page.waitForSelector('[data-exchange-rate]', { state: 'attached' });
-
-let currVal = await page.evaluate(() =>  document.querySelector('[data-exchange-rate]').getAttribute("data-exchange-rate"))
-console.log("currval ",currVal)
-
-let currName = await page.evaluate(i => document.querySelectorAll('select')[1][i].textContent,i)
-console.log("currname ",currName)
-currObj[currName.toLowerCase()] = parseFloat(currVal)
+        currObj[currName.toLowerCase()] = parseFloat(currVal)
     }
 
 
-
-console.log(currObj)
+    return currObj
 }
