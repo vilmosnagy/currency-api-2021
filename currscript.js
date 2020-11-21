@@ -5,25 +5,23 @@ const {
   firefox
 } = require('playwright')
 
-// Global variables to access browser and page
-let browser, page
-
-// stores consolidated currencies in currcode:currname format i.e USD:US Dollar
-let allcurr = fs.readFileSync(path.join(__dirname, 'allcurrencies.min.json')).toString();
-allcurr = JSON.parse(allcurr)
+// Global variables to access browser
+let browser
 
 // spaces to be used for prettify/json.stringify
-var prettyindent = 4
+const indent = 4
 
-let allcurrUpper = {}
-for(const [key, value] of Object.entries(allcurr))
-allcurrUpper[key.toUpperCase()] = value
+// stores consolidated currencies in currcode:currname format i.e USD:US Dollar
+let allcurr = fs.readFileSync(path.join(__dirname, 'allcurrencies.min.json')).toString()
+allcurr = JSON.parse(allcurr)
 
-// stores  consolidated currencies in lowercased currname:currcode format i.e. us dollar:usd
-let allcurrObj = {}
-for(const [key, value] of Object.entries(allcurr))
-allcurrObj[value.toLowerCase()] = key.toLowerCase()
+// Takes allcurr and have all the keys in uppercase
+const allcurrKeyUpper = {}
+for (const [key, value] of Object.entries(allcurr)) { allcurrKeyUpper[key.toUpperCase()] = value }
 
+// Takes allcurr and store in lowercased currname:currcode format i.e. us dollar:usd
+const allcurrLower = {}
+for (const [key, value] of Object.entries(allcurr)) { allcurrLower[value.toLowerCase()] = key.toLowerCase() }
 
 // Page and browser is a global variable and it can be accessed from anywhere
 // function that launches a browser
@@ -31,12 +29,13 @@ async function launchBrowser () {
   browser = await firefox.launch({
     headless: false
   })
-  const context = await browser.newContext()
-  page = await context.newPage()
 }
 
 //  Returns values against 1 dollar in curr:val format in an object, eg: inr:70.11
 async function getBingCurrencies () {
+  const context = await browser.newContext()
+  const page = await context.newPage()
+
   const link = 'https://www.bing.com/search?q=1+usd+to+euro'
   await page.goto(link, {
     timeout: 60000
@@ -49,7 +48,7 @@ async function getBingCurrencies () {
   for (let i = 170; i <= currLen; i++) {
     // Wait for few random seconds
     const randomWaitTime = 3000
-    await new Promise(r => setTimeout(r, getRandomNo(randomWaitTime)))
+    await new Promise(resolve => setTimeout(resolve, getRandomNo(randomWaitTime)))
 
     // Have to select 1st option in dropdown in second loop also, after than use incremental values
     // This is done to select all the options in the dropdown, as the selected option get's disappeared
@@ -79,7 +78,6 @@ async function getBingCurrencies () {
     // let currVal = await page.evaluate(() => document.getElementById('cc_tv').getAttribute("value"))
 
     currObj[currName.toLowerCase()] = parseFloat(currVal)
-   
   }
 
   return currObj
@@ -90,12 +88,17 @@ begin()
 async function begin () {
   // launch the browser
   await launchBrowser()
- await test()
+
+  const googBingCurrJSON = await getGoogBingCurrencies()
+  const availCurrListObj = await getAvailCurrencyJSON(googBingCurrJSON)
+  fs.writeFileSync(path.join(__dirname, 'currencies.min.json'), JSON.stringify(availCurrListObj))
+  fs.writeFileSync(path.join(__dirname, 'currencies.json'), JSON.stringify(availCurrListObj, null, indent))
+
   // Get bing currency values
   //  let bingCurrObj = await getBingCurrencies()
   //  console.log("bingvalu is ", bingCurrObj)
-  //const googCurrObj = await getGoogCurrencies()
-  //console.log(googCurrObj)
+  // const googCurrObj = await getGoogCurrencies()
+  // console.log(googCurrObj)
   // close the browser when everything is done
   await browser.close()
 }
@@ -108,6 +111,9 @@ function getRandomNo (max) {
 
 //  Returns values against 1 dollar in  curr:val format in an object, eg: inr:70.11
 async function getGoogCurrencies () {
+  const context = await browser.newContext()
+  const page = await context.newPage()
+
   const link = 'https://google.com/search?q=1+usd+to+eur'
   await page.goto(link, {
     timeout: 60000
@@ -125,7 +131,7 @@ async function getGoogCurrencies () {
   for (let i = 145; i < currLen; i++) {
     // Wait for few random seconds
     const randomWaitTime = 3000
-    await new Promise(r => setTimeout(r, getRandomNo(randomWaitTime)))
+    await new Promise(resolve => setTimeout(resolve, getRandomNo(randomWaitTime)))
     // Set unique id to second selector, so that I can easily access it using id
     await page.evaluate(uniqueSelectID => document.querySelectorAll('select')[1].setAttribute('id', uniqueSelectID), uniqueSelectID)
 
@@ -142,40 +148,30 @@ async function getGoogCurrencies () {
 
     // Get currency name i.e Indian Rupee etc
     const currName = await page.evaluate(i => document.querySelectorAll('select')[1][i].textContent, i)
-    // Make sure there isn't any undefined values in here   
-    const currCodeName = allcurrObj[currName.toLowerCase()]
+
+    const currCodeName = allcurrLower[currName.toLowerCase()]
+
+    // Make sure there isn't any undefined values in here
     // For future stability getting currency list from bing will be good idea to avoid this sort of error
-    if(currCodeName === undefined)
-     throw 'Currency code not defined, maybe its a new currency'
-    currObj[allcurrObj[currName.toLowerCase()]] = parseFloat(currVal)
+    if (currCodeName === undefined) { throw new Error('Currency code not defined, maybe its a new currency') }
+
+    currObj[allcurrLower[currName.toLowerCase()]] = parseFloat(currVal)
   }
 
   return currObj
 }
 
 // lists all the curr avaible.json
-async function test(){
- 
-  const bingCurrObj = await getBingCurrencies()
+async function getAvailCurrencyJSON (googBingCurrObj) {
+  const availCurrListObj = {}
+  const sortedCurrCode = Object.keys(googBingCurrObj).sort()
+  for (const key of sortedCurrCode) { availCurrListObj[key] = allcurrKeyUpper[key.toUpperCase()] }
 
-  const googCurrObj = await getGoogCurrencies()
+  return availCurrListObj
+}
 
-
- let googBingCurrObj = {...googCurrObj, ...bingCurrObj}
-
- let currlistJSON = {}
- let sortedCurrCode = Object.keys(googBingCurrObj).sort()
- for(const key of sortedCurrCode)
-  currlistJSON[key] =  allcurrUpper[key.toUpperCase()]
-
- 
-
- console.log("googbingcurrobj\n",googBingCurrObj)
-
- console.log("currlistjsin\n",currlistJSON)
-
- fs.writeFileSync(path.join(__dirname, "currencies.min.json"), JSON.stringify(currlistJSON))
-
- fs.writeFileSync(path.join(__dirname, "currencies.json"), JSON.stringify(currlistJSON, null, prettyindent))
-
+async function getGoogBingCurrencies () {
+  // Fetch google and bing currency list concurrently
+  const [googCurrObj, bingCurrObj] = await Promise.all([getGoogCurrencies(), getBingCurrencies()])
+  return { ...googCurrObj, ...bingCurrObj }
 }
