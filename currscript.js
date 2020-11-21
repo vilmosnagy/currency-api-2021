@@ -11,6 +11,14 @@ let browser, page
 // stores consolidated currencies in currcode:currname format i.e USD:US Dollar
 let allcurr = fs.readFileSync(path.join(__dirname, 'allcurrencies.min.json')).toString();
 allcurr = JSON.parse(allcurr)
+
+// spaces to be used for prettify/json.stringify
+var prettyindent = 4
+
+let allcurrUpper = {}
+for(const [key, value] of Object.entries(allcurr))
+allcurrUpper[key.toUpperCase()] = value
+
 // stores  consolidated currencies in lowercased currname:currcode format i.e. us dollar:usd
 let allcurrObj = {}
 for(const [key, value] of Object.entries(allcurr))
@@ -38,7 +46,7 @@ async function getBingCurrencies () {
   const currLen = await page.evaluate(() => document.querySelector('#tocurrdd > ul').children.length)
   // Stores the currencies in curr:val format : eg : inr:70.1
   const currObj = {}
-  for (let i = 0; i <= currLen; i++) {
+  for (let i = 170; i <= currLen; i++) {
     // Wait for few random seconds
     const randomWaitTime = 3000
     await new Promise(r => setTimeout(r, getRandomNo(randomWaitTime)))
@@ -71,8 +79,7 @@ async function getBingCurrencies () {
     // let currVal = await page.evaluate(() => document.getElementById('cc_tv').getAttribute("value"))
 
     currObj[currName.toLowerCase()] = parseFloat(currVal)
-    console.log('currName is ', currName)
-    console.log('currVal is ', currVal)
+   
   }
 
   return currObj
@@ -83,11 +90,12 @@ begin()
 async function begin () {
   // launch the browser
   await launchBrowser()
+ await test()
   // Get bing currency values
   //  let bingCurrObj = await getBingCurrencies()
   //  console.log("bingvalu is ", bingCurrObj)
-  const googCurrObj = await getGoogCurrencies()
-  console.log(googCurrObj)
+  //const googCurrObj = await getGoogCurrencies()
+  //console.log(googCurrObj)
   // close the browser when everything is done
   await browser.close()
 }
@@ -114,7 +122,7 @@ async function getGoogCurrencies () {
   // Stores number of currencies in bing dropdown
   const currLen = await page.evaluate(uniqueSelectID => document.getElementById(uniqueSelectID).children.length, uniqueSelectID)
 
-  for (let i = 0; i < currLen; i++) {
+  for (let i = 145; i < currLen; i++) {
     // Wait for few random seconds
     const randomWaitTime = 3000
     await new Promise(r => setTimeout(r, getRandomNo(randomWaitTime)))
@@ -134,7 +142,11 @@ async function getGoogCurrencies () {
 
     // Get currency name i.e Indian Rupee etc
     const currName = await page.evaluate(i => document.querySelectorAll('select')[1][i].textContent, i)
-    
+    // Make sure there isn't any undefined values in here   
+    const currCodeName = allcurrObj[currName.toLowerCase()]
+    // For future stability getting currency list from bing will be good idea to avoid this sort of error
+    if(currCodeName === undefined)
+     throw 'Currency code not defined, maybe its a new currency'
     currObj[allcurrObj[currName.toLowerCase()]] = parseFloat(currVal)
   }
 
@@ -142,8 +154,28 @@ async function getGoogCurrencies () {
 }
 
 // lists all the curr avaible.json
-function test(){
+async function test(){
+ 
+  const bingCurrObj = await getBingCurrencies()
+
+  const googCurrObj = await getGoogCurrencies()
+
+
+ let googBingCurrObj = {...googCurrObj, ...bingCurrObj}
+
+ let currlistJSON = {}
+
+ for(const [key, value] of Object.entries(googBingCurrObj))
+  currlistJSON[key] =  allcurrUpper[key.toUpperCase()]
+
  
 
+ console.log("googbingcurrobj\n",googBingCurrObj)
+
+ console.log("currlistjsin\n",currlistJSON)
+
+ fs.writeFileSync(path.join(__dirname, "currencies.min.json"), JSON.stringify(currlistJSON))
+
+ fs.writeFileSync(path.join(__dirname, "currencies.json"), JSON.stringify(currlistJSON, null, prettyindent))
 
 }
