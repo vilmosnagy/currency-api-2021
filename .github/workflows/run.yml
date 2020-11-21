@@ -30,7 +30,7 @@ jobs:
           git sparse-checkout add 'latest/*'
           git checkout
 
-      - name: Get cache directories for npm and pip
+      - name: Get cache directory for npm
         id: cache-dir
         shell: bash
         run: echo "::set-output name=npmcache::$(npm config get cache)"
@@ -49,12 +49,6 @@ jobs:
           
       - name: Running the command
         run: node currscript.js
-
-      - name: Saving the log.txt as artifcat
-        uses: actions/upload-artifact@v2
-        with:
-          name: log
-          path: log.txt
 
       # commiting and pushing changes
       - name: commit and push
