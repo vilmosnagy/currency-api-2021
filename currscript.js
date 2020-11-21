@@ -164,8 +164,8 @@ async function test(){
  let googBingCurrObj = {...googCurrObj, ...bingCurrObj}
 
  let currlistJSON = {}
-
- for(const [key, value] of Object.entries(googBingCurrObj))
+ let sortedCurrCode = Object.keys(googBingCurrObj).sort()
+ for(const key of sortedCurrCode)
   currlistJSON[key] =  allcurrUpper[key.toUpperCase()]
 
  
