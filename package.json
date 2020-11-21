@@ -6,8 +6,7 @@
   "dependencies": {
     "fs-extra": "latest",
     "playwright": "~1.6.2"
-},
-
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fawazahmed0/currency-api.git"
