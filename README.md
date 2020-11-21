@@ -18,7 +18,7 @@ This is a Free Currency Exchange Rates API
 **Formats:**
 
 `date`<br>
-The date should be either `latest` or in `YYYY-MM-DD` format <br>
+The date should either be `latest` or in `YYYY-MM-DD` format <br>
 **Note:** Historical rates before `22-11-2020` are not available
 
 The Endpoints Supports HTTP GET Method and returns the data in two formats:
@@ -42,7 +42,7 @@ The Endpoints Supports HTTP GET Method and returns the data in two formats:
 
 
 - `/currencies/{currencyCode}/{currencyCode}` <br>
-> Get EUR to JPY list:<br>
+> Get the currency value for EUR to JPY:<br>
 [https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur/jpy.json](https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur/jpy.json "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur/jpy.json")
 
 
