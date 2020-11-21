@@ -47,7 +47,7 @@ async function getBingCurrencies () {
   const currLen = await page.evaluate(() => document.querySelector('#tocurrdd > ul').children.length)
   // Stores the currencies in curr:val format : eg : inr:70.1
   const currObj = {}
-  for (let i = 170; i <= currLen; i++) {
+  for (let i = 0; i <= currLen; i++) {
     // Wait for few random seconds
     const randomWaitTime = 3000
     await new Promise(resolve => setTimeout(resolve, getRandomNo(randomWaitTime)))
@@ -140,7 +140,7 @@ async function getGoogCurrencies () {
   // Stores number of currencies in bing dropdown
   const currLen = await page.evaluate(uniqueSelectID => document.getElementById(uniqueSelectID).children.length, uniqueSelectID)
 
-  for (let i = 145; i < currLen; i++) {
+  for (let i = 0; i < currLen; i++) {
     // Wait for few random seconds
     const randomWaitTime = 3000
     await new Promise(resolve => setTimeout(resolve, getRandomNo(randomWaitTime)))
@@ -195,8 +195,8 @@ async function getAvailCurrencyJSON (googBingCurrObj) {
 async function getGoogBingCurrencies () {
   // Fetch google and bing currency list concurrently
   const [googCurrObj, bingCurrObj] = await Promise.all([getGoogCurrencies(), getBingCurrencies()])
-  // Currencies from google get's more priority than bing, as the later object overwrites by first object values
-  const googBingCurrJSON = { ...bingCurrObj,...googCurrObj, usd: 1 }
+  // Currencies from google gets more priority than bing, as the later object overwrites by first object values
+  const googBingCurrJSON = { ...bingCurrObj, ...googCurrObj, usd: 1 }
   // return sorted object
   return sortObjByKeys(googBingCurrJSON)
 }
