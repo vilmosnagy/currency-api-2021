@@ -1,0 +1,20 @@
+{
+  "name": "currency-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "currscript.js",
+  "dependencies": {
+    "fs-extra": "latest",
+    "playwright": "~1.6.2"
+},
+
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fawazahmed0/currency-api.git"
+  },
+  "author": "Fawaz Ahmed fawazahmed0@hotmail.com",
+  "bugs": {
+    "url": "https://github.com/fawazahmed0/currency-api/issues"
+  },
+  "homepage": "https://github.com/fawazahmed0/currency-api#readme"
+}
