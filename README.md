@@ -17,9 +17,9 @@ This is a Free Currency Exchange Rates API
 
 **Formats:**
 
-- `date`<br>
-The date should be either `latest` or in `YYYY-MM-DD` format
-**Note:** You can get the historical rates after `22-11-2020`
+`date`<br>
+The date should be either `latest` or in `YYYY-MM-DD` format <br>
+**Note:** Historical rates before `22-11-2020` are not available
 
 The Endpoints Supports HTTP GET Method and returns the data in two formats:
 
