@@ -1,7 +1,7 @@
 ### Currency API                                                                                     
 **In the name of God, who have guided me to do this work and I seek refuge in him from the evil of everything***
 
-This is a Free Currency Foreign Exchange Rates API
+This is a Free Currency Exchange Rates API
 
 **Features:**
 - Free & Blazing Fast response
