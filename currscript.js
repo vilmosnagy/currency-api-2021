@@ -29,7 +29,7 @@ for (const [key, value] of Object.entries(allcurr)) { allcurrLower[value.toLower
 // function that launches a browser
 async function launchBrowser () {
   browser = await firefox.launch({
-    headless: false
+    headless: true
   })
 }
 
