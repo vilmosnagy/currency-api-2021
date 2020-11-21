@@ -232,8 +232,10 @@ async function generateFiles (googBingCurrJSON) {
   }
 }
 
-// return 1 fromCurr value for toCurr , eg: 1 INR = 0.011 Eur
+// return 1 fromCurr as base currency for toCurr 
 // fromCurr & toCurr is against 1 USD
+// For example, if you pass 74 INR & 0.84 EUR and 1 INR = 0.011 Eur
+// It returns 0.011
 function currencyValue (fromCurr, toCurr) {
   return toCurr / fromCurr
 }
