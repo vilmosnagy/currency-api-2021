@@ -1,11 +1,10 @@
 
+const fs = require('fs-extra')
 const path = require('path')
 // Requires for md5 hash generations for fonts to check duplicates
 const {
   firefox
 } = require('playwright')
-
-const fs = require('fs-extra');
 
 // Global variables to access browser
 let browser
@@ -13,6 +12,7 @@ let browser
 // spaces to be used for prettify/json.stringify
 const indent = 4
 
+// curr means currency
 // stores consolidated currencies in currcode:currname format i.e USD:US Dollar
 let allcurr = fs.readFileSync(path.join(__dirname, 'allcurrencies.min.json')).toString()
 allcurr = JSON.parse(allcurr)
@@ -21,7 +21,7 @@ allcurr = JSON.parse(allcurr)
 const allcurrKeyUpper = {}
 for (const [key, value] of Object.entries(allcurr)) { allcurrKeyUpper[key.toUpperCase()] = value }
 
-// Takes allcurr and store in lowercased currname:currcode format i.e. us dollar:usd
+// Takes allcurr and store in lowercase currname:currcode format i.e. us dollar:usd
 const allcurrLower = {}
 for (const [key, value] of Object.entries(allcurr)) { allcurrLower[value.toLowerCase()] = key.toLowerCase() }
 
@@ -53,7 +53,7 @@ async function getBingCurrencies () {
     await new Promise(resolve => setTimeout(resolve, getRandomNo(randomWaitTime)))
 
     // Have to select 1st option in dropdown in second loop also, after than use incremental values
-    // This is done to select all the options in the dropdown, as the selected option get's disappeared
+    // This is done to select all the options in the dropdown, as the selected option gets disappeared
     const j = i === 0 ? 1 : i
 
     // Query that will select the dropdown value
@@ -63,11 +63,11 @@ async function getBingCurrencies () {
     // click the dropdown option
     await page.evaluate(queryStr => { document.querySelector(queryStr).click() }, queryStr)
     // wait for page to load fully
-    await page.waitForLoadState('load',{timeout:60000})
+    await page.waitForLoadState('load', { timeout: 60000 })
 
-    // Go to intial page if #CurrencyAjaxResponse_FCR selector isn't found, as this means bing doesn't have value for that currency (maybe it's outdated currency)
+    // Go to initial page if #CurrencyAjaxResponse_FCR selector isn't found, as this means bing doesn't have value for that currency (maybe it's outdated currency)
     try {
-      await page.waitForSelector('#CurrencyAjaxResponse_FCR', { state: 'attached',timeout:2000 })
+      await page.waitForSelector('#CurrencyAjaxResponse_FCR', { state: 'attached', timeout: 2000 })
     } catch (error) {
       await page.goto(link, {
         timeout: 60000
@@ -88,35 +88,30 @@ async function getBingCurrencies () {
 }
 
 begin()
-
+// Begins the program
 async function begin () {
   // launch the browser
   await launchBrowser()
-  let dateToday =new Date().toISOString().substring(0,10)
-  fs.mkdirSync(path.join(__dirname,dateToday), {
+
+  // Backup the latest currency files to date folder, for historical currency access
+  const dateToday = new Date().toISOString().substring(0, 10)
+  const dateDir = path.join(__dirname, dateToday)
+  const latestDir = path.join(__dirname, 'latest')
+  fs.mkdirSync(dateDir, {
     recursive: true
   })
-  fs.mkdirSync(path.join(__dirname,'latest'), {
-    recursive: true
-  })
-  fs.copySync(path.join(__dirname,'latest'), path.join(__dirname,dateToday))
-  // currencies against 1 usd
+  fs.copySync(latestDir, dateDir)
+
+  // google & bing currencies against 1 usd
   const googBingCurrJSON = await getGoogBingCurrencies()
+  // Get & Save All the available currencies in api
   const availCurrListObj = await getAvailCurrencyJSON(googBingCurrJSON)
-  fs.writeFileSync(path.join(__dirname,'latest', 'currencies.min.json'), JSON.stringify(availCurrListObj))
-  fs.writeFileSync(path.join(__dirname, 'latest','currencies.json'), JSON.stringify(availCurrListObj, null, indent))
+  fs.writeFileSync(path.join(latestDir, 'currencies.min.json'), JSON.stringify(availCurrListObj))
+  fs.writeFileSync(path.join(latestDir, 'currencies.json'), JSON.stringify(availCurrListObj, null, indent))
 
- 
-
-console.log(googBingCurrJSON)
-  await test(googBingCurrJSON)
-
-  // Get bing currency values
-  //  let bingCurrObj = await getBingCurrencies()
-  //  console.log("bingvalu is ", bingCurrObj)
-  // const googCurrObj = await getGoogCurrencies()
-  // console.log(googCurrObj)
-  // close the browser when everything is done
+  // Generate API files using // google & bing currencies against 1 usd
+  await generateFiles(googBingCurrJSON)
+  // Close the browser
   await browser.close()
 }
 
@@ -157,16 +152,16 @@ async function getGoogCurrencies () {
     await page.evaluate(() => document.querySelector('[data-exchange-rate]').remove())
     // Select the currency from dropdown
     await page.selectOption('#' + uniqueSelectID, { index: i })
-   try {
-         // wait for currency value to come
-    await page.waitForSelector('[data-exchange-rate]', { state: 'attached',timeout:60000 })
-   } catch (error) {
-    await page.goto(link, {
-      timeout: 60000
-    })
-     // Ignore the currency if it doesn't come, happens with cuban peso
-     continue 
-   }
+    try {
+      // wait for currency value to come
+      await page.waitForSelector('[data-exchange-rate]', { state: 'attached', timeout: 60000 })
+    } catch (error) {
+      await page.goto(link, {
+        timeout: 60000
+      })
+      // Ignore the currency if it doesn't come, happens with cuban peso
+      continue
+    }
 
     // Get currency value
     const currVal = await page.evaluate(() => document.querySelector('[data-exchange-rate]').getAttribute('data-exchange-rate'))
@@ -178,10 +173,9 @@ async function getGoogCurrencies () {
 
     // Make sure there isn't any undefined values in here
     // For future stability getting currency list from bing will be good idea to avoid this sort of error
-    if (currCodeName === undefined) { 
-      console.log('Currency code not defined for '+currName+', its value needs to be added in allcurrencies json file')
+    if (currCodeName === undefined) {
+      console.log('Currency code not defined for ' + currName + ', its value needs to be added in allcurrencies json file')
       continue
-     // throw new Error('Currency code not defined for '+currName+', its value needs to be added in allcurrencies json file')
     }
 
     currObj[currCodeName] = parseFloat(currVal)
@@ -193,8 +187,7 @@ async function getGoogCurrencies () {
 // Returns all the available currencies in the API
 async function getAvailCurrencyJSON (googBingCurrObj) {
   const availCurrListObj = {}
-  const sortedCurrCode = Object.keys(googBingCurrObj).sort()
-  for (const key of sortedCurrCode) { availCurrListObj[key] = allcurrKeyUpper[key.toUpperCase()] }
+  for (const key of Object.keys(googBingCurrObj)) { availCurrListObj[key] = allcurrKeyUpper[key.toUpperCase()] }
 
   return availCurrListObj
 }
@@ -202,49 +195,45 @@ async function getAvailCurrencyJSON (googBingCurrObj) {
 async function getGoogBingCurrencies () {
   // Fetch google and bing currency list concurrently
   const [googCurrObj, bingCurrObj] = await Promise.all([getGoogCurrencies(), getBingCurrencies()])
-  let googBingCurrJSON = { ...googCurrObj, ...bingCurrObj, 'usd':1 }
+  // Currencies from google get's more priority than bing, as the later object overwrites by first object values
+  const googBingCurrJSON = { ...bingCurrObj,...googCurrObj, usd: 1 }
   // return sorted object
   return sortObjByKeys(googBingCurrJSON)
-
 }
 
-function sortObjByKeys(obj){
-  let sortedObj = {}
+// Sorts an object by keys and returns the sorted object
+function sortObjByKeys (obj) {
+  const sortedObj = {}
   const sortedKeys = Object.keys(obj).sort()
-  for (const key of sortedKeys) { sortedObj[key] = obj[key]}
-return sortedObj
+  for (const key of sortedKeys) { sortedObj[key] = obj[key] }
+  return sortedObj
 }
 
-
-async function test(googBingCurrJSON){
-
-
-  for (const [fromKey, fromValue] of Object.entries(googBingCurrJSON))
-  { 
-    let tempObj = {}
+// Generates the api files
+async function generateFiles (googBingCurrJSON) {
+  const currenciesDir = path.join(__dirname, 'latest', 'currencies')
+  for (const [fromKey, fromValue] of Object.entries(googBingCurrJSON)) {
+    const tempObj = {}
     tempObj[fromKey] = {}
-
-    fs.mkdirSync(path.join(__dirname,'latest','currencies',fromKey), {
+    const fromKeyDir = path.join(__dirname, 'latest', 'currencies', fromKey)
+    fs.mkdirSync(fromKeyDir, {
       recursive: true
-    });
-   
-    for (const [toKey, toValue] of Object.entries(googBingCurrJSON))
-    { 
-      let tempSingleObj = {}
+    })
+
+    for (const [toKey, toValue] of Object.entries(googBingCurrJSON)) {
+      const tempSingleObj = {}
       tempObj[fromKey][toKey] = currencyValue(fromValue, toValue)
-      tempSingleObj[toKey] = tempObj[fromKey][toKey] 
-      fs.writeFileSync(path.join(__dirname,'latest','currencies',fromKey, toKey+".min.json"), JSON.stringify(tempSingleObj))
-     }
-     fs.writeFileSync(path.join(__dirname,'latest','currencies', fromKey+".min.json"), JSON.stringify(tempObj))
-
-
-   }
-
-
+      tempSingleObj[toKey] = tempObj[fromKey][toKey]
+      fs.writeFileSync(path.join(fromKeyDir, toKey + '.min.json'), JSON.stringify(tempSingleObj))
+      fs.writeFileSync(path.join(fromKeyDir, toKey + '.json'), JSON.stringify(tempSingleObj, null, indent))
+    }
+    fs.writeFileSync(path.join(currenciesDir, fromKey + '.min.json'), JSON.stringify(tempObj))
+    fs.writeFileSync(path.join(currenciesDir, fromKey + '.json'), JSON.stringify(tempObj, null, indent))
+  }
 }
 
 // return 1 fromCurr value for toCurr , eg: 1 INR = 0.011 Eur
-// fromCurr & toCurr is against 1 USD 
-function currencyValue(fromCurr, toCurr){
-return toCurr/fromCurr
+// fromCurr & toCurr is against 1 USD
+function currencyValue (fromCurr, toCurr) {
+  return toCurr / fromCurr
 }
