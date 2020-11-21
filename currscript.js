@@ -1,9 +1,11 @@
-const fs = require('fs')
+
 const path = require('path')
 // Requires for md5 hash generations for fonts to check duplicates
 const {
   firefox
 } = require('playwright')
+
+const fs = require('fs-extra');
 
 // Global variables to access browser
 let browser
@@ -45,7 +47,7 @@ async function getBingCurrencies () {
   const currLen = await page.evaluate(() => document.querySelector('#tocurrdd > ul').children.length)
   // Stores the currencies in curr:val format : eg : inr:70.1
   const currObj = {}
-  for (let i = 0; i <= currLen; i++) {
+  for (let i = 170; i <= currLen; i++) {
     // Wait for few random seconds
     const randomWaitTime = 3000
     await new Promise(resolve => setTimeout(resolve, getRandomNo(randomWaitTime)))
@@ -90,11 +92,22 @@ begin()
 async function begin () {
   // launch the browser
   await launchBrowser()
-
+  let dateToday =new Date().toISOString().substring(0,10)
+  fs.mkdirSync(path.join(__dirname,dateToday), {
+    recursive: true
+  })
+  fs.mkdirSync(path.join(__dirname,'latest'), {
+    recursive: true
+  })
+  fs.copySync(path.join(__dirname,'latest'), path.join(__dirname,dateToday))
+  // currencies against 1 usd
   const googBingCurrJSON = await getGoogBingCurrencies()
   const availCurrListObj = await getAvailCurrencyJSON(googBingCurrJSON)
-  fs.writeFileSync(path.join(__dirname, 'currencies.min.json'), JSON.stringify(availCurrListObj))
-  fs.writeFileSync(path.join(__dirname, 'currencies.json'), JSON.stringify(availCurrListObj, null, indent))
+  fs.writeFileSync(path.join(__dirname,'latest', 'currencies.min.json'), JSON.stringify(availCurrListObj))
+  fs.writeFileSync(path.join(__dirname, 'latest','currencies.json'), JSON.stringify(availCurrListObj, null, indent))
+
+ 
+
 console.log(googBingCurrJSON)
   await test(googBingCurrJSON)
 
@@ -132,7 +145,7 @@ async function getGoogCurrencies () {
   // Stores number of currencies in bing dropdown
   const currLen = await page.evaluate(uniqueSelectID => document.getElementById(uniqueSelectID).children.length, uniqueSelectID)
 
-  for (let i = 0; i < currLen; i++) {
+  for (let i = 145; i < currLen; i++) {
     // Wait for few random seconds
     const randomWaitTime = 3000
     await new Promise(resolve => setTimeout(resolve, getRandomNo(randomWaitTime)))
@@ -189,14 +202,49 @@ async function getAvailCurrencyJSON (googBingCurrObj) {
 async function getGoogBingCurrencies () {
   // Fetch google and bing currency list concurrently
   const [googCurrObj, bingCurrObj] = await Promise.all([getGoogCurrencies(), getBingCurrencies()])
-  return { ...googCurrObj, ...bingCurrObj }
+  let googBingCurrJSON = { ...googCurrObj, ...bingCurrObj, 'usd':1 }
+  // return sorted object
+  return sortObjByKeys(googBingCurrJSON)
 
+}
+
+function sortObjByKeys(obj){
+  let sortedObj = {}
+  const sortedKeys = Object.keys(obj).sort()
+  for (const key of sortedKeys) { sortedObj[key] = obj[key]}
+return sortedObj
 }
 
 
 async function test(googBingCurrJSON){
 
 
+  for (const [fromKey, fromValue] of Object.entries(googBingCurrJSON))
+  { 
+    let tempObj = {}
+    tempObj[fromKey] = {}
+
+    fs.mkdirSync(path.join(__dirname,'latest','currencies',fromKey), {
+      recursive: true
+    });
+   
+    for (const [toKey, toValue] of Object.entries(googBingCurrJSON))
+    { 
+      let tempSingleObj = {}
+      tempObj[fromKey][toKey] = currencyValue(fromValue, toValue)
+      tempSingleObj[toKey] = tempObj[fromKey][toKey] 
+      fs.writeFileSync(path.join(__dirname,'latest','currencies',fromKey, toKey+".min.json"), JSON.stringify(tempSingleObj))
+     }
+     fs.writeFileSync(path.join(__dirname,'latest','currencies', fromKey+".min.json"), JSON.stringify(tempObj))
 
 
+   }
+
+
+}
+
+// return 1 fromCurr value for toCurr , eg: 1 INR = 0.011 Eur
+// fromCurr & toCurr is against 1 USD 
+function currencyValue(fromCurr, toCurr){
+return toCurr/fromCurr
 }
