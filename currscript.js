@@ -8,6 +8,15 @@ const {
 // Global variables to access browser and page
 let browser, page
 
+// stores consolidated currencies in currcode:currname format i.e USD:US Dollar
+let allcurr = fs.readFileSync(path.join(__dirname, 'allcurrencies.min.json')).toString();
+allcurr = JSON.parse(allcurr)
+// stores  consolidated currencies in lowercased currname:currcode format i.e. us dollar:usd
+let allcurrObj = {}
+for(const [key, value] of Object.entries(allcurr))
+allcurrObj[value.toLowerCase()] = key.toLowerCase()
+
+
 // Page and browser is a global variable and it can be accessed from anywhere
 // function that launches a browser
 async function launchBrowser () {
@@ -89,7 +98,7 @@ function getRandomNo (max) {
   return Math.floor(Math.random() * Math.floor(max))
 }
 
-//  Returns values against 1 dollar in currName:val format in an object, eg: indian rupee:70.11
+//  Returns values against 1 dollar in  curr:val format in an object, eg: inr:70.11
 async function getGoogCurrencies () {
   const link = 'https://google.com/search?q=1+usd+to+eur'
   await page.goto(link, {
@@ -125,9 +134,16 @@ async function getGoogCurrencies () {
 
     // Get currency name i.e Indian Rupee etc
     const currName = await page.evaluate(i => document.querySelectorAll('select')[1][i].textContent, i)
-
-    currObj[currName.toLowerCase()] = parseFloat(currVal)
+    
+    currObj[allcurrObj[currName.toLowerCase()]] = parseFloat(currVal)
   }
 
   return currObj
+}
+
+// lists all the curr avaible.json
+function test(){
+ 
+
+
 }
