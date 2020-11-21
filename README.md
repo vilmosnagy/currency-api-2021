@@ -18,6 +18,7 @@ This is a Free Currency Exchange Rates API
 **Formats:**
 
 `date`<br>
+
 The date should either be `latest` or in `YYYY-MM-DD` format <br>
 **Note:** Historical rates before `22-11-2020` are not available
 
