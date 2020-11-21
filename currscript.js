@@ -45,7 +45,7 @@ async function getBingCurrencies () {
   const currLen = await page.evaluate(() => document.querySelector('#tocurrdd > ul').children.length)
   // Stores the currencies in curr:val format : eg : inr:70.1
   const currObj = {}
-  for (let i = 170; i <= currLen; i++) {
+  for (let i = 0; i <= currLen; i++) {
     // Wait for few random seconds
     const randomWaitTime = 3000
     await new Promise(resolve => setTimeout(resolve, getRandomNo(randomWaitTime)))
@@ -61,13 +61,15 @@ async function getBingCurrencies () {
     // click the dropdown option
     await page.evaluate(queryStr => { document.querySelector(queryStr).click() }, queryStr)
     // wait for page to load fully
-    await page.waitForLoadState()
+    await page.waitForLoadState('load',{timeout:60000})
 
     // Go to intial page if #CurrencyAjaxResponse_FCR selector isn't found, as this means bing doesn't have value for that currency (maybe it's outdated currency)
     try {
-      await page.waitForSelector('#CurrencyAjaxResponse_FCR', { state: 'attached' })
+      await page.waitForSelector('#CurrencyAjaxResponse_FCR', { state: 'attached',timeout:2000 })
     } catch (error) {
-      await page.goto(link)
+      await page.goto(link, {
+        timeout: 60000
+      })
       continue
     }
 
@@ -93,6 +95,8 @@ async function begin () {
   const availCurrListObj = await getAvailCurrencyJSON(googBingCurrJSON)
   fs.writeFileSync(path.join(__dirname, 'currencies.min.json'), JSON.stringify(availCurrListObj))
   fs.writeFileSync(path.join(__dirname, 'currencies.json'), JSON.stringify(availCurrListObj, null, indent))
+console.log(googBingCurrJSON)
+  await test(googBingCurrJSON)
 
   // Get bing currency values
   //  let bingCurrObj = await getBingCurrencies()
@@ -128,7 +132,7 @@ async function getGoogCurrencies () {
   // Stores number of currencies in bing dropdown
   const currLen = await page.evaluate(uniqueSelectID => document.getElementById(uniqueSelectID).children.length, uniqueSelectID)
 
-  for (let i = 145; i < currLen; i++) {
+  for (let i = 0; i < currLen; i++) {
     // Wait for few random seconds
     const randomWaitTime = 3000
     await new Promise(resolve => setTimeout(resolve, getRandomNo(randomWaitTime)))
@@ -140,9 +144,17 @@ async function getGoogCurrencies () {
     await page.evaluate(() => document.querySelector('[data-exchange-rate]').remove())
     // Select the currency from dropdown
     await page.selectOption('#' + uniqueSelectID, { index: i })
+   try {
+         // wait for currency value to come
+    await page.waitForSelector('[data-exchange-rate]', { state: 'attached',timeout:60000 })
+   } catch (error) {
+    await page.goto(link, {
+      timeout: 60000
+    })
+     // Ignore the currency if it doesn't come, happens with cuban peso
+     continue 
+   }
 
-    // wait for currency value to come
-    await page.waitForSelector('[data-exchange-rate]', { state: 'attached' })
     // Get currency value
     const currVal = await page.evaluate(() => document.querySelector('[data-exchange-rate]').getAttribute('data-exchange-rate'))
 
@@ -153,15 +165,19 @@ async function getGoogCurrencies () {
 
     // Make sure there isn't any undefined values in here
     // For future stability getting currency list from bing will be good idea to avoid this sort of error
-    if (currCodeName === undefined) { throw new Error('Currency code not defined, maybe its a new currency') }
+    if (currCodeName === undefined) { 
+      console.log('Currency code not defined for '+currName+', its value needs to be added in allcurrencies json file')
+      continue
+     // throw new Error('Currency code not defined for '+currName+', its value needs to be added in allcurrencies json file')
+    }
 
-    currObj[allcurrLower[currName.toLowerCase()]] = parseFloat(currVal)
+    currObj[currCodeName] = parseFloat(currVal)
   }
 
   return currObj
 }
 
-// lists all the curr avaible.json
+// Returns all the available currencies in the API
 async function getAvailCurrencyJSON (googBingCurrObj) {
   const availCurrListObj = {}
   const sortedCurrCode = Object.keys(googBingCurrObj).sort()
@@ -174,4 +190,13 @@ async function getGoogBingCurrencies () {
   // Fetch google and bing currency list concurrently
   const [googCurrObj, bingCurrObj] = await Promise.all([getGoogCurrencies(), getBingCurrencies()])
   return { ...googCurrObj, ...bingCurrObj }
+
+}
+
+
+async function test(googBingCurrJSON){
+
+
+
+
 }
