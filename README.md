@@ -6,7 +6,7 @@ This is a Free Currency Exchange Rates API
 **Features:**
 - Free & Blazing Fast response
 - No Rate limits
-- 150+ Currencies, Including Common Crypto Currencies
+- 150+ Currencies, Including Common Cryptocurrencies
 - Daily Updated
 
 
