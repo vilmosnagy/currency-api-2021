@@ -1,5 +1,5 @@
 ### Currency API                                                                                     
-**In the name of God, who have guided me to do this work***
+**In the name of God, who have guided me to do this work**
 
 This is a Free Currency Exchange Rates API
 
