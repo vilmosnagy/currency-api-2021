@@ -94,8 +94,13 @@ async function begin () {
   await launchBrowser()
 
   // Backup the latest currency files to date folder, for historical currency access
-  const dateToday = new Date().toISOString().substring(0, 10)
-  const dateDir = path.join(__dirname, dateToday)
+  // Todays date
+  const date  = new Date();
+  // Set the date to yesterday
+  date.setDate(date.getDate() - 1);
+  // Get yesterdays date in YYYY-MM-DD format
+  let  dateYesterday = date.toISOString().substring(0, 10)
+  const dateDir = path.join(__dirname, dateYesterday)
   const latestDir = path.join(__dirname, 'latest')
   fs.mkdirSync(dateDir, {
     recursive: true
