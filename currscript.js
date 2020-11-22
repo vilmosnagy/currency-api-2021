@@ -95,11 +95,11 @@ async function begin () {
 
   // Backup the latest currency files to date folder, for historical currency access
   // Todays date
-  const date  = new Date();
+  const date = new Date()
   // Set the date to yesterday
-  date.setDate(date.getDate() - 1);
+  date.setDate(date.getDate() - 1)
   // Get yesterdays date in YYYY-MM-DD format
-  let  dateYesterday = date.toISOString().substring(0, 10)
+  const dateYesterday = date.toISOString().substring(0, 10)
   const dateDir = path.join(__dirname, dateYesterday)
   const latestDir = path.join(__dirname, 'latest')
   fs.mkdirSync(dateDir, {
@@ -237,7 +237,7 @@ async function generateFiles (googBingCurrJSON) {
   }
 }
 
-// return 1 fromCurr as base currency for toCurr 
+// return 1 fromCurr as base currency for toCurr
 // fromCurr & toCurr is against 1 USD
 // For example, if you pass 74 INR & 0.84 EUR and 1 INR = 0.011 Eur
 // It returns 0.011
