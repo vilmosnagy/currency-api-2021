@@ -4,8 +4,6 @@
   <img width="460" height="300" src="https://github.com/fawazahmed0/currency-api/raw/1/money.jpg">
 </p>
 
-![Twitter URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Ffawazahmed0%2Fcurrency-api)
-
 
 **In the name of God, who have guided me to do this work**
 
