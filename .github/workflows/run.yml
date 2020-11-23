@@ -27,7 +27,7 @@ jobs:
           REPO="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
           git clone --filter=blob:none --no-checkout --depth 1  --sparse $REPO .
           git sparse-checkout add '*/!*'
-          git sparse-checkout add 'latest/*' '2020-11-22/*'
+          git sparse-checkout add 'latest/*'
           git checkout
 
       - name: Get cache directory for npm
