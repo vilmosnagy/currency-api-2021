@@ -242,5 +242,5 @@ async function generateFiles (googBingCurrJSON) {
 // For example, if you pass 74 INR & 0.84 EUR and 1 INR = 0.011 Eur
 // It returns 0.011 , with numbers upto 6 decimal places
 function currencyValue (fromCurr, toCurr) {
-  return (toCurr / fromCurr).toFixed(6)
+  return parseFloat((toCurr / fromCurr).toFixed(6))
 }
