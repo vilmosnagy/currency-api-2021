@@ -26,7 +26,7 @@
 `date`
 
 The date should either be `latest` or in `YYYY-MM-DD` format <br>
-**Note:** Historical rates before `22-11-2020` are not available
+**Note:** Historical rates before `2020-11-22` are not available
 
 The Endpoints Supports HTTP GET Method and returns the data in two formats:
 
@@ -47,8 +47,8 @@ The Endpoints Supports HTTP GET Method and returns the data in two formats:
 > Get the currency list with EUR as base currency:<br>
 [https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur.json](https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur.json "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur.json") <br>
 
-> Get the currency list with EUR as base currency on date 24-11-2020:<br>
-[https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/24-11-2020/currencies/eur.json](https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/24-11-2020/currencies/eur.json "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/24-11-2020/currencies/eur.json") <br>
+> Get the currency list with EUR as base currency on date 2020-11-22:<br>
+[https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/2020-11-24/currencies/eur.json](https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/2020-11-24/currencies/eur.json "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/2020-11-24/currencies/eur.json") <br>
 
 - `/currencies/{currencyCode}/{currencyCode}` <br>
 > Get the currency value for EUR to JPY:<br>
