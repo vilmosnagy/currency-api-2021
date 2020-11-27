@@ -47,7 +47,7 @@ The Endpoints Supports HTTP GET Method and returns the data in two formats:
 > Get the currency list with EUR as base currency:<br>
 [https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur.json](https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur.json "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur.json") <br>
 
-> Get the currency list with EUR as base currency on date 2020-11-22:<br>
+> Get the currency list with EUR as base currency on date 2020-11-24:<br>
 [https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/2020-11-24/currencies/eur.json](https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/2020-11-24/currencies/eur.json "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/2020-11-24/currencies/eur.json") <br>
 
 - `/currencies/{currencyCode}/{currencyCode}` <br>
