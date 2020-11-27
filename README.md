@@ -21,7 +21,7 @@
 
 `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@{apiVersion}/{date}/{endpoint}`
 
-`date`<br>
+**date:**
 
 The date should either be `latest` or in `YYYY-MM-DD` format <br>
 **Note:** Historical rates before `22-11-2020` are not available
