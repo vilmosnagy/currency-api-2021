@@ -21,13 +21,13 @@
 
 `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@{apiVersion}/{date}/{endpoint}`
 
-
-**Formats:**
-
 `date`<br>
 
 The date should either be `latest` or in `YYYY-MM-DD` format <br>
 **Note:** Historical rates before `22-11-2020` are not available
+
+
+**Formats:**
 
 The Endpoints Supports HTTP GET Method and returns the data in two formats:
 
