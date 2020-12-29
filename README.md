@@ -34,7 +34,7 @@ The Endpoints Supports HTTP GET Method and returns the data in two formats:
 
 `/{endpoint}.min.json`
 
-The above formats also work for fallback i.e if .min.json link fails, you can use .json link and vice versa
+The above formats also work for fallback i.e if `.min.json` link fails, you can use `.json` link and vice versa
 
 **Endpoints:**
 
