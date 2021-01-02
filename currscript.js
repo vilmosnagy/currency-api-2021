@@ -1,6 +1,5 @@
 const fs = require('fs-extra')
 const path = require('path')
-// Requires for md5 hash generations for fonts to check duplicates
 const {
   firefox
 } = require('playwright-firefox')
