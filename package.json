@@ -4,7 +4,7 @@
   "description": "",
   "main": "currscript.js",
   "dependencies": {
-    "fs-extra": "latest",
+    "fs-extra": "^9.1.0",
     "playwright-firefox": "~1.6.2"
   },
   "repository": {

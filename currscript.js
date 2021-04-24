@@ -62,7 +62,7 @@ async function getBingCurrencies () {
     await page.evaluate(queryStr => { document.querySelector(queryStr).click() }, queryStr)
     // wait for page to load fully
     await page.waitForLoadState('load', { timeout: 60000 })
-
+    console.log('bing: ',currName)
     // Go to initial page if #CurrencyAjaxResponse_FCR selector isn't found, as this means bing doesn't have value for that currency (maybe it's outdated currency)
     try {
       await page.waitForSelector('#CurrencyAjaxResponse_FCR', { state: 'attached', timeout: 2000 })
@@ -72,7 +72,7 @@ async function getBingCurrencies () {
       })
       continue
     }
-
+  
     // Get currency value i.e 1.66 etc
     const currVal = await page.$eval('#CurrencyAjaxResponse_FCR', e => e.textContent)
 
@@ -168,10 +168,10 @@ async function getGoogCurrencies () {
 
     // Get currency value
     const currVal = await page.evaluate(() => document.querySelector('[data-exchange-rate]').getAttribute('data-exchange-rate'))
-
+    
     // Get currency name i.e Indian Rupee etc
     const currName = await page.evaluate(i => document.querySelectorAll('select')[1][i].textContent, i)
-
+    console.log('goog: ',currName)
     const currCodeName = allcurrLower[currName.toLowerCase()]
 
     // Make sure there isn't any undefined values in here
