@@ -40,9 +40,14 @@ async function getBingCurrencies () {
   await page.goto(link, {
     timeout: 60000
   })
+  
+  const pageSource = await page.evaluate(() => document.documentElement.outerHTML)
+  console.log(pageSource)
+
 
   // Stores number of currencies in bing dropdown
   const currLen = await page.evaluate(() => document.querySelector('#tocurrdd > ul').children.length)
+  console.log('bing currlen ',currLen)
   // Stores the currencies in curr:val format : eg : inr:70.1
   const currObj = {}
   for (let i = 0; i <= currLen; i++) {
