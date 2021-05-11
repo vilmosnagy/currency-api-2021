@@ -23,6 +23,7 @@ for (const [key, value] of Object.entries(allcurr)) { allcurrKeyUpper[key.toUppe
 const allcurrLower = {}
 for (const [key, value] of Object.entries(allcurr)) { allcurrLower[value.toLowerCase()] = key.toLowerCase() }
 
+const dateToday = new Date().toISOString().substring(0, 10)
 // Page and browser is a global variable and it can be accessed from anywhere
 // function that launches a browser
 async function launchBrowser () {
@@ -226,10 +227,12 @@ async function generateFiles (googBingCurrJSON) {
     for (const [toKey, toValue] of Object.entries(googBingCurrJSON)) {
       const tempSingleObj = {}
       tempObj[fromKey][toKey] = currencyValue(fromValue, toValue)
+      tempSingleObj['date'] = dateToday;
       tempSingleObj[toKey] = tempObj[fromKey][toKey]
       fs.writeFileSync(path.join(fromKeyDir, toKey + '.min.json'), JSON.stringify(tempSingleObj))
       fs.writeFileSync(path.join(fromKeyDir, toKey + '.json'), JSON.stringify(tempSingleObj, null, indent))
     }
+    tempObj['date'] = dateToday;
     fs.writeFileSync(path.join(currenciesDir, fromKey + '.min.json'), JSON.stringify(tempObj))
     fs.writeFileSync(path.join(currenciesDir, fromKey + '.json'), JSON.stringify(tempObj, null, indent))
   }
