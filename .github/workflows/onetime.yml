@@ -1,0 +1,61 @@
+name: onetime
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for branch 1 and on start directory, command.txt file changes or by manually running the workflow from actions tab
+on:
+  schedule:
+    - cron: '0 0 * * *'  # every day at midnight
+
+  workflow_dispatch:
+
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      # Partial clone
+      - name: Partial clone
+        shell: bash
+        run: |
+          REPO="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
+          git clone $REPO .
+
+      - name: Get cache directory for npm
+        id: cache-dir
+        shell: bash
+        run: echo "::set-output name=npmcache::$(npm config get cache)"
+
+      - name: Trying to use the old cache if available
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.cache-dir.outputs.npmcache }}
+          key: ${{ runner.os }}-cache-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-cache-
+            ${{ runner.os }}-
+
+      - name: Install Dependencies
+        run: | 
+          npm install
+          npm install glob
+          
+      - name: Running the command
+        run: node setdate.js
+
+      # commiting and pushing changes
+      - name: commit and push
+        shell: bash
+        run: |
+          git config --global user.email github-actions@github.com
+          git config --global user.name github-actions
+          git pull
+          git add -A
+          git commit -m 'Update old Currencies'
+          git push
