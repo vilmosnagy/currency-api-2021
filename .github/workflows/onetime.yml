@@ -12,7 +12,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -21,8 +21,9 @@ jobs:
       - name: Partial clone
         shell: bash
         run: |
+          mkdir C:/currency-api.git
           REPO="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
-          git clone $REPO .
+          git clone $REPO C:/currency-api.git
 
       - name: Get cache directory for npm
         id: cache-dir
@@ -39,16 +40,19 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install Dependencies
+        working-directory: C:/currency-api.git
         run: | 
           npm install
           npm install glob
           
       - name: Running the command
+        working-directory: C:/currency-api.git
         run: node setdate.js
 
       # commiting and pushing changes
       - name: commit and push
         shell: bash
+        working-directory: C:/currency-api.git
         run: |
           git config --global user.email github-actions@github.com
           git config --global user.name github-actions
