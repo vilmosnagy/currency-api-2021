@@ -218,6 +218,7 @@ async function generateFiles (googBingCurrJSON) {
   const currenciesDir = path.join(__dirname, 'latest', 'currencies')
   for (const [fromKey, fromValue] of Object.entries(googBingCurrJSON)) {
     const tempObj = {}
+    tempObj['date'] = dateToday;
     tempObj[fromKey] = {}
     const fromKeyDir = path.join(__dirname, 'latest', 'currencies', fromKey)
     fs.mkdirSync(fromKeyDir, {
@@ -232,7 +233,6 @@ async function generateFiles (googBingCurrJSON) {
       fs.writeFileSync(path.join(fromKeyDir, toKey + '.min.json'), JSON.stringify(tempSingleObj))
       fs.writeFileSync(path.join(fromKeyDir, toKey + '.json'), JSON.stringify(tempSingleObj, null, indent))
     }
-    tempObj['date'] = dateToday;
     fs.writeFileSync(path.join(currenciesDir, fromKey + '.min.json'), JSON.stringify(tempObj))
     fs.writeFileSync(path.join(currenciesDir, fromKey + '.json'), JSON.stringify(tempObj, null, indent))
   }
