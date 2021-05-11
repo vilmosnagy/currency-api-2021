@@ -54,6 +54,8 @@ jobs:
         shell: bash
         working-directory: C:/currency-api.git
         run: |
+          git config --global pack.threads 1
+          git config --global pack.windowMemory 6144m
           git config --global user.email github-actions@github.com
           git config --global user.name github-actions
           git pull
