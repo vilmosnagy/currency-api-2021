@@ -10,7 +10,7 @@ var getDirectories = function (src, callback) {
 
 for (let date of fs.readdirSync( path.join(__dirname, '.') ).filter(e=> /\d{4}-\d{2}-\d{2}/.test(e))){
 
-getDirectories(path.join(__dirname, date), function (err, res) {
+getDirectories(path.join(__dirname, date,'currencies'), function (err, res) {
   if (err) {
     console.log('Error', err);
   } else {
