@@ -47,7 +47,7 @@ jobs:
           
       - name: Running the command
         working-directory: C:/currency-api.git
-        run: node setdate.js
+        run: node --max-old-space-size=6144 setdate.js
 
       # commiting and pushing changes
       - name: commit and push
