@@ -58,8 +58,8 @@ jobs:
           git config --global pack.windowMemory 7g
           git config --global pack.deltacachesize 7g
           git config --global pack.packSizeLimit 4095m
-          git config --global core.packedGitLimit 7g
-          git config --global core.packedGitWindowSize 7g
+          git config --global core.packedGitLimit 4095m
+          git config --global core.packedGitWindowSize 4095m
           git config --global user.email github-actions@github.com
           git config --global user.name github-actions
           git add -A
