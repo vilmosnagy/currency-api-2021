@@ -4,8 +4,8 @@
   <img width="460" height="300" src="https://github.com/fawazahmed0/currency-api/raw/1/money.jpg">
 </p>
 
-
-
+[![](https://data.jsdelivr.com/v1/package/gh/fawazahmed0/currency-api/badge)](https://www.jsdelivr.com/package/gh/fawazahmed0/currency-api)
+[![](https://data.jsdelivr.com/v1/package/gh/fawazahmed0/currency-api/badge/rank)](https://www.jsdelivr.com/package/gh/fawazahmed0/currency-api)
 
 **In the name of God, who have guided me to do this work**
 
