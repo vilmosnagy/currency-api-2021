@@ -6,6 +6,7 @@
 
 [![](https://data.jsdelivr.com/v1/package/gh/fawazahmed0/currency-api/badge)](https://www.jsdelivr.com/package/gh/fawazahmed0/currency-api)
 [![](https://data.jsdelivr.com/v1/package/gh/fawazahmed0/currency-api/badge/rank)](https://www.jsdelivr.com/package/gh/fawazahmed0/currency-api)
+[![Fetch-Currencies](https://github.com/fawazahmed0/currency-api/actions/workflows/run.yml/badge.svg)](https://github.com/fawazahmed0/currency-api/actions/workflows/run.yml)
 [![](https://img.shields.io/badge/Donate-Donate-orange)](https://fawazahmed0.github.io/donate.html?mymsg=Thanks%20for%20this%20API%2C%20I%20am%20Fawaz%20Ahmed%20(fawazahmed0)%20developer%20of%20this%20API%2C%20if%20you%20liked%20my%20work%20consider%20donating%20a%20few%20bucks%20to%20me%20or%20at%20least%20share%20it%20with%20friends%2C%20so%20they%20don%27t%20have%20to%20pay%20for%20any%20currency%20API%20Service%3Cbr%3E%20%3Cbr%3E%20Thanks%20in%20Advance&sharelink=https%3A%2F%2Fgithub.com%2Ffawazahmed0%2Fcurrency-api&smallsharetext=Free%20Currency%20Forex%20Rates%20API&largesharetext=Share%20the%20Free%20Currency%20Forex%20Rates%20API%20with%20150%2B%20Currencies%20Available%20%26%20No%20Rate%20Limits&sharebtnmsg=Share%20the%20Free%20Currency%20API&nodonatebtn=)
 
 **In the name of God, who have guided me to do this work**
