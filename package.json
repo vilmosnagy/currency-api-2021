@@ -4,8 +4,7 @@
   "description": "",
   "main": "currscript.js",
   "dependencies": {
-    "fs-extra": "^9.1.0",
-    "playwright-firefox": "~1.12.2"
+    "fs-extra": "^9.1.0"
   },
   "repository": {
     "type": "git",
@@ -15,5 +14,8 @@
   "bugs": {
     "url": "https://github.com/fawazahmed0/currency-api/issues"
   },
-  "homepage": "https://github.com/fawazahmed0/currency-api#readme"
+  "homepage": "https://github.com/fawazahmed0/currency-api#readme",
+  "devDependencies": {
+    "playwright-firefox": "^1.12.2"
+  }
 }
