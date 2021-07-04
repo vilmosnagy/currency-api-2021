@@ -71,6 +71,7 @@ The above formats also work for fallback i.e if `.min.json` link fails, you can 
 I would like to thank all the Supporters who have donated:<br>
 
 - Shaheen Alhumaydhi 
+- Kaushal Parashar
 
 ### Donate:
 I make sure that this API Service keeps running without any issue<br>
