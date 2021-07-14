@@ -72,6 +72,8 @@ I would like to thank all the Supporters who have donated $3 or more:<br>
 
 - Shaheen Alhumaydhi 
 - Kaushal Parashar
+- Lury Williams
+- Fernando Toribio
 
 ### Donate($3 or more):
 I make sure that this API Service keeps running without any issue<br>
