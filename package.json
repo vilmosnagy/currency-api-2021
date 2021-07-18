@@ -16,6 +16,6 @@
   },
   "homepage": "https://github.com/fawazahmed0/currency-api#readme",
   "devDependencies": {
-    "playwright-firefox": "^1.12.2"
+    "playwright-firefox": "latest"
   }
 }
