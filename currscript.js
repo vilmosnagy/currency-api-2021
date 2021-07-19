@@ -26,14 +26,14 @@ for (const [key, value] of Object.entries(allcurr)) { allcurrLower[value.toLower
 const dateToday = new Date().toISOString().substring(0, 10)
 // Page and browser is a global variable and it can be accessed from anywhere
 // function that launches a browser
-async function launchBrowser () {
+async function launchBrowser() {
   browser = await firefox.launch({
     headless: true
   })
 }
 
 //  Returns values against 1 dollar in curr:val format in an object, eg: inr:70.11
-async function getBingCurrencies () {
+async function getBingCurrencies() {
   const context = await browser.newContext()
   const page = await context.newPage()
 
@@ -88,7 +88,7 @@ async function getBingCurrencies () {
 
 begin()
 // Begins the program
-async function begin () {
+async function begin() {
   // launch the browser
   await launchBrowser()
 
@@ -121,18 +121,24 @@ async function begin () {
 
 // Returns random number, generates random less than the input argument
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-function getRandomNo (max) {
+function getRandomNo(max) {
   return Math.floor(Math.random() * Math.floor(max))
 }
 
 //  Returns values against 1 dollar in  curr:val format in an object, eg: inr:70.11
-async function getGoogCurrencies () {
+async function getGoogCurrencies() {
   const context = await browser.newContext()
   const page = await context.newPage()
 
   const link = 'https://google.com/search?q=1+usd+to+eur'
   await page.goto(link, {
     timeout: 60000
+  })
+
+  // returns first select option value, which is usually United States Dollar
+  const initialSelectedValue = await page.evaluate(() => {
+    let elem = document.querySelector('select')
+    return elem.options[elem.selectedIndex].text
   })
 
   const uniqueSelectID = 'mySelectElem133'
@@ -175,6 +181,14 @@ async function getGoogCurrencies () {
 
     const currCodeName = allcurrLower[currName.toLowerCase()]
 
+    // if first select option and second select option are equal, we will reload the page and skip this select index to avoid issues
+    if (currName == initialSelectedValue) {
+      await page.goto(link, {
+        timeout: 60000
+      })
+      continue
+    }
+
     // Make sure there isn't any undefined values in here
     // For future stability getting currency list from bing will be good idea to avoid this sort of error
     if (currCodeName === undefined) {
@@ -189,14 +203,14 @@ async function getGoogCurrencies () {
 }
 
 // Returns all the available currencies in the API
-async function getAvailCurrencyJSON (googBingCurrObj) {
+async function getAvailCurrencyJSON(googBingCurrObj) {
   const availCurrListObj = {}
   for (const key of Object.keys(googBingCurrObj)) { availCurrListObj[key] = allcurrKeyUpper[key.toUpperCase()] }
 
   return availCurrListObj
 }
 
-async function getGoogBingCurrencies () {
+async function getGoogBingCurrencies() {
   // Fetch google and bing currency list concurrently
   const [googCurrObj, bingCurrObj] = await Promise.all([getGoogCurrencies(), getBingCurrencies()])
   // Currencies from google gets more priority than bing, as the later object overwrites by first object values
@@ -206,7 +220,7 @@ async function getGoogBingCurrencies () {
 }
 
 // Sorts an object by keys and returns the sorted object
-function sortObjByKeys (obj) {
+function sortObjByKeys(obj) {
   const sortedObj = {}
   const sortedKeys = Object.keys(obj).sort()
   for (const key of sortedKeys) { sortedObj[key] = obj[key] }
@@ -214,7 +228,7 @@ function sortObjByKeys (obj) {
 }
 
 // Generates the api files
-async function generateFiles (googBingCurrJSON) {
+async function generateFiles(googBingCurrJSON) {
   const currenciesDir = path.join(__dirname, 'latest', 'currencies')
   for (const [fromKey, fromValue] of Object.entries(googBingCurrJSON)) {
     const tempObj = {}
@@ -242,6 +256,6 @@ async function generateFiles (googBingCurrJSON) {
 // fromCurr & toCurr is against 1 USD
 // For example, if you pass 74 INR & 0.84 EUR and 1 INR = 0.011 Eur
 // It returns 0.011 , with numbers upto 6 decimal places
-function currencyValue (fromCurr, toCurr) {
+function currencyValue(fromCurr, toCurr) {
   return parseFloat((toCurr / fromCurr).toFixed(6))
 }
