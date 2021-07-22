@@ -77,8 +77,7 @@ I would like to thank all the Supporters who have helped in supporting this tool
 
 ### Support:
 You can help support this Service by as little as $3, because this Service needs regular maintenance to keep it running.<br>
-[Support Link](https://bit.ly/3hW14nN)
-
+[Support Link](https://bit.ly/2W9NLru)
 
 Also Please Star this repo by clicking on [:star: button](#) above [:arrow_upper_right:](#)
 
