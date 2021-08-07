@@ -1,4 +1,4 @@
-<h1 align="center">Free Currency Rates API    </h1>
+<h1 align="center">Free Currency Rates API</h1>
 
 <p align="center">
   <img width="460" height="300" src="https://github.com/fawazahmed0/currency-api/raw/1/money.jpg">
