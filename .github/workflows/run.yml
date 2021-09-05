@@ -22,7 +22,7 @@ jobs:
 
       # Partial clone
       - name: Partial clone
-        shell: bash
+        shell: pwsh
         run: |
           REPO="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
           git clone --filter=blob:none --no-checkout --depth 1  --sparse $REPO .
