@@ -44,7 +44,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
           
       - name: Running the command
         run: node currscript.js
