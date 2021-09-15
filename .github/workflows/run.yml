@@ -24,12 +24,12 @@ jobs:
       - name: Partial clone
         shell: bash
         run: |
-          git config core.preloadIndex false
           git config --global http.postbuffer 524288000 
-          git config --global pack.windowMemory 1024m
+          git config --global pack.windowMemory 256m
           REPO="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
           git clone --filter=blob:none --no-checkout --depth 1  --sparse $REPO .
           git sparse-checkout add 'latest/*'
+          git config core.preloadIndex false
           
       - name: windows
         shell: pwsh
