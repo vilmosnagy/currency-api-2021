@@ -31,6 +31,8 @@ jobs:
           git sparse-checkout add 'latest/*'
           git config core.preloadIndex false
           git config pack.threads 1
+          git repack -adf
+          git gc --aggressive --prune=now
           git checkout  
           
 
