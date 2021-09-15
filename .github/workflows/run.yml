@@ -19,6 +19,9 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - shell: pwsh
+        run: |
+           Install-Package GitForWindows -Version 2.33.0.2
 
       # Partial clone
       - name: Partial clone
@@ -27,8 +30,6 @@ jobs:
           REPO="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
           git clone --filter=blob:none --no-checkout --depth 1  --sparse $REPO .
           git sparse-checkout add 'latest/*'
-          git repack -a -d -f --depth=250 --window=250
-          git gc --aggressive --prune=now
           git checkout
 
 
