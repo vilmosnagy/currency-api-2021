@@ -30,11 +30,8 @@ jobs:
           git clone --filter=blob:none --no-checkout --depth 1  --sparse $REPO .
           git sparse-checkout add 'latest/*'
           git config core.preloadIndex false
-          
-      - name: windows
-        shell: pwsh
-        run: |
-          git checkout   
+          git config pack.threads 1
+          git checkout  
           
 
       - name: Get cache directory for npm
