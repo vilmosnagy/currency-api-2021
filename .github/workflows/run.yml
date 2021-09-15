@@ -20,7 +20,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - run: |
-          winget install microsoft/git
+          choco install git
 
       # Partial clone
       - name: Partial clone
