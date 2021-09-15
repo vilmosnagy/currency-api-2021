@@ -20,6 +20,12 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
 
+      - name: install git
+        shell: pwsh
+        run: |
+          Add-AppPackage -path "https://github.com/microsoft/winget-cli/releases/download/v1.0.11692/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+          winget install microsoft/git
+
 
       # Partial clone
       - name: Partial clone
@@ -30,7 +36,11 @@ jobs:
           git sparse-checkout add 'latest/*'
           git repack -a -d -f --depth=250 --window=250
           git gc --aggressive --prune=now
-          git checkout  
+
+      - name: windows
+        shell: pwsh
+        run: |
+          git checkout
   
 
       - name: Get cache directory for npm
