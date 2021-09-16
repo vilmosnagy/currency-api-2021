@@ -1,15 +1,22 @@
 const fs = require('fs-extra')
 const path = require('path')
-const {
-  firefox
-} = require('playwright-firefox')
+const fetch = require('node-fetch')
 
-// Global variables to access browser
-let browser
 
 // spaces to be used for prettify/json.stringify
 const indent = 4
 
+// By market capitalization
+// Ref: https://coinmarketcap.com/all/views/all/
+let topCryptoCurrency = ["BTC","ETH","ADA","BNB","USDT","XRP","SOL","DOT","DOGE","USDC","UNI","LUNA","LINK","AVAX","LTC","BUSD","BCH","ALGO","WBTC","ICP","MATIC","FIL","TRX","FTT","XLM","VET","ATOM","ETC","THETA","DAI"]
+
+let currLink, cryptoLink
+if (process.env.CI) {
+  currLink = process.env.currlink
+  cryptoLink = process.env.cryptolink
+} else {
+  [currLink, cryptoLink] = fs.readFileSync(path.join(__dirname, 'links.ini')).toString().split(/\r?\n/).map(e => e.trim())
+}
 // curr means currency
 // stores consolidated currencies in currcode:currname format i.e USD:US Dollar
 let allcurr = fs.readFileSync(path.join(__dirname, 'allcurrencies.min.json')).toString()
@@ -24,73 +31,13 @@ const allcurrLower = {}
 for (const [key, value] of Object.entries(allcurr)) { allcurrLower[value.toLowerCase()] = key.toLowerCase() }
 
 const dateToday = new Date().toISOString().substring(0, 10)
-// Page and browser is a global variable and it can be accessed from anywhere
-// function that launches a browser
-async function launchBrowser() {
-  browser = await firefox.launch({
-    headless: true
-  })
-}
 
-//  Returns values against 1 dollar in curr:val format in an object, eg: inr:70.11
-async function getBingCurrencies() {
-  const context = await browser.newContext()
-  const page = await context.newPage()
-
-  const link = 'https://www.bing.com/search?q=1+usd+to+euro'
-  await page.goto(link, {
-    timeout: 60000
-  })
-
-  // Stores number of currencies in bing dropdown
-  const currLen = await page.evaluate(() => document.querySelector('#tocurrdd > ul').children.length)
-  // Stores the currencies in curr:val format : eg : inr:70.1
-  const currObj = {}
-  for (let i = 0; i <= currLen; i++) {
-    // Wait for few random seconds
-    const randomWaitTime = 3000
-    await new Promise(resolve => setTimeout(resolve, getRandomNo(randomWaitTime)))
-
-    // Have to select 1st option in dropdown in second loop also, after than use incremental values
-    // This is done to select all the options in the dropdown, as the selected option gets disappeared
-    const j = i === 0 ? 1 : i
-
-    // Query that will select the dropdown value
-    const queryStr = '#tocurrdd > ul > li:nth-child(' + j + ')'
-    // currency name i.e usd etc
-    const currName = await page.evaluate(queryStr => document.querySelector(queryStr).getAttribute('value'), queryStr)
-    // click the dropdown option
-    await page.evaluate(queryStr => { document.querySelector(queryStr).click() }, queryStr)
-    // wait for page to load fully
-    await page.waitForLoadState('load', { timeout: 60000 })
-
-    // Go to initial page if #CurrencyAjaxResponse_FCR selector isn't found, as this means bing doesn't have value for that currency (maybe it's outdated currency)
-    try {
-      await page.waitForSelector('#CurrencyAjaxResponse_FCR', { state: 'attached', timeout: 2000 })
-    } catch (error) {
-      await page.goto(link, {
-        timeout: 60000
-      })
-      continue
-    }
-
-    // Get currency value i.e 1.66 etc
-    const currVal = await page.$eval('#CurrencyAjaxResponse_FCR', e => e.textContent)
-
-    // await page.waitForSelector('#cc_tv', { state: 'attached' });
-    // let currVal = await page.evaluate(() => document.getElementById('cc_tv').getAttribute("value"))
-
-    currObj[currName.toLowerCase()] = parseFloat(currVal)
-  }
-
-  return currObj
-}
 
 begin()
 // Begins the program
 async function begin() {
   // launch the browser
-  await launchBrowser()
+ // await launchBrowser()
 
   // Backup the latest currency files to date folder, for historical currency access
   // Todays date
@@ -106,118 +53,70 @@ async function begin() {
   })
   fs.copySync(latestDir, dateDir)
 
-  // google & bing currencies against 1 usd
-  const googBingCurrJSON = await getGoogBingCurrencies()
+  const currJSON = await getCurrencies()
   // Get & Save All the available currencies in api
-  const availCurrListObj = await getAvailCurrencyJSON(googBingCurrJSON)
+  const availCurrListObj = await getAvailCurrencyJSON(currJSON)
   fs.writeFileSync(path.join(latestDir, 'currencies.min.json'), JSON.stringify(availCurrListObj))
   fs.writeFileSync(path.join(latestDir, 'currencies.json'), JSON.stringify(availCurrListObj, null, indent))
 
-  // Generate API files using // google & bing currencies against 1 usd
-  await generateFiles(googBingCurrJSON)
+  // Generate API files
+  await generateFiles(currJSON)
   // Close the browser
-  await browser.close()
+//  await browser.close()
 }
 
-// Returns random number, generates random less than the input argument
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-function getRandomNo(max) {
-  return Math.floor(Math.random() * Math.floor(max))
-}
-
-//  Returns values against 1 dollar in  curr:val format in an object, eg: inr:70.11
-async function getGoogCurrencies() {
-  const context = await browser.newContext()
-  const page = await context.newPage()
-
-  const link = 'https://google.com/search?q=1+usd+to+eur'
-  await page.goto(link, {
-    timeout: 60000
-  })
-
-  // returns first select option value, which is usually United States Dollar
-  const initialSelectedValue = await page.evaluate(() => {
-    let elem = document.querySelector('select')
-    return elem.options[elem.selectedIndex].text
-  })
-
-  const uniqueSelectID = 'mySelectElem133'
-  // Set unique id to second selector, so that I can easily access it using id
-  await page.evaluate(uniqueSelectID => document.querySelectorAll('select')[1].setAttribute('id', uniqueSelectID), uniqueSelectID)
-
-  // Stores the currencies in currencyName:val format : eg : indian rupee:70.1
-  const currObj = {}
-  // Stores number of currencies in bing dropdown
-  const currLen = await page.evaluate(uniqueSelectID => document.getElementById(uniqueSelectID).children.length, uniqueSelectID)
-
-  for (let i = 0; i < currLen; i++) {
-    // Wait for few random seconds
-    const randomWaitTime = 3000
-    await new Promise(resolve => setTimeout(resolve, getRandomNo(randomWaitTime)))
-    // Set unique id to second selector, so that I can easily access it using id
-    await page.evaluate(uniqueSelectID => document.querySelectorAll('select')[1].setAttribute('id', uniqueSelectID), uniqueSelectID)
-
-    // Remove the element containing the currency rate, so that we can wait for that element after selecting new currency
-
-    await page.evaluate(() => document.querySelector('[data-exchange-rate]').remove())
-    // Select the currency from dropdown
-    await page.selectOption('#' + uniqueSelectID, { index: i })
-    try {
-      // wait for currency value to come
-      await page.waitForSelector('[data-exchange-rate]', { state: 'attached', timeout: 60000 })
-    } catch (error) {
-      await page.goto(link, {
-        timeout: 60000
-      })
-      // Ignore the currency if it doesn't come, happens with cuban peso
-      continue
-    }
-
-    // Get currency value
-    const currVal = await page.evaluate(() => document.querySelector('[data-exchange-rate]').getAttribute('data-exchange-rate'))
-
-    // Get currency name i.e Indian Rupee etc
-    const currName = await page.evaluate(i => document.querySelectorAll('select')[1][i].textContent, i)
-
-    const currCodeName = allcurrLower[currName.toLowerCase()]
-
-    // if first select option and second select option are equal, we will reload the page and skip this select index to avoid issues
-    if (currName == initialSelectedValue) {
-      await page.goto(link, {
-        timeout: 60000
-      })
-      continue
-    }
-
-    // Make sure there isn't any undefined values in here
-    // For future stability getting currency list from bing will be good idea to avoid this sort of error
-    if (currCodeName === undefined) {
-      console.log('Currency code not defined for ' + currName + ', its value needs to be added in allcurrencies json file')
-      continue
-    }
-
-    currObj[currCodeName] = parseFloat(currVal)
-  }
-
-  return currObj
-}
 
 // Returns all the available currencies in the API
-async function getAvailCurrencyJSON(googBingCurrObj) {
+async function getAvailCurrencyJSON(CurrObj) {
   const availCurrListObj = {}
-  for (const key of Object.keys(googBingCurrObj)) { availCurrListObj[key] = allcurrKeyUpper[key.toUpperCase()] }
+  for (const key of Object.keys(CurrObj)) { 
+    availCurrListObj[key] = allcurrKeyUpper[key.toUpperCase()] || ""
+    if(!allcurrKeyUpper[key.toUpperCase()])
+    console.log(key,"currency code doesn't exist in allcurrencies.min.json")
+   }
 
   return availCurrListObj
 }
 
-async function getGoogBingCurrencies() {
-  // Fetch google and bing currency list concurrently
-  const [googCurrObj, bingCurrObj] = await Promise.all([getGoogCurrencies(), getBingCurrencies()])
-  // Currencies from google gets more priority than bing, as the later object overwrites by first object values
-  const googBingCurrJSON = { ...bingCurrObj, ...googCurrObj, usd: 1 }
+async function getCurrencies() {
+let currDataObj = await getCurrData()
+currDataObj = toLowerCaseKeysBaseCurr(currDataObj)
+
+let cryptoDataObj = await getCryptoData()
+// we also need to convert base usd to eur
+cryptoDataObj = toLowerCaseKeysBaseCurr(cryptoDataObj,currDataObj['usd'])
+  const CurrJSON = { ...cryptoDataObj, ...currDataObj, eur: 1 }
   // return sorted object
-  return sortObjByKeys(googBingCurrJSON)
+  return sortObjByKeys(CurrJSON)
 }
+
+// Euro as base rates
+async function getCurrData(){
+  let response = await fetch(currLink)
+  let data = await response.json()
+  return data.rates
+}
+
+// USD as base rates
+async function getCryptoData(){
+  let response = await fetch(cryptoLink)
+  let data = await response.json()
+  return Object.fromEntries(                                                           // Dividing value by 1 to convert to 1 USD as base rate
+    Object.entries(data.rates).filter(([k, v]) => topCryptoCurrency.includes(k)).map(([k,v])=>[k,1/v]) )
+}
+
+// convert object keys to lowercase and values to float
+// tocurr parameter
+// convert object having a base currency value to object of another base currency value
+// For example: pass object with base currency as usd, pass tocurr as 1Eur to 1.17USD i.e 1.17 to convert object to base currency as EUR
+function toLowerCaseKeysBaseCurr(obj, tocurr=1){
+tocurr = parseFloat(tocurr)
+let newobj = {}
+for(let [key,value] of Object.entries(obj))
+    newobj[key.toLowerCase()] = parseFloat(value)*tocurr
+return newobj
+}
+
 
 // Sorts an object by keys and returns the sorted object
 function sortObjByKeys(obj) {
@@ -253,7 +152,7 @@ async function generateFiles(googBingCurrJSON) {
 }
 
 // return 1 fromCurr as base currency for toCurr
-// fromCurr & toCurr is against 1 USD
+// fromCurr & toCurr is against 1 USD or 1 EUR or something common
 // For example, if you pass 74 INR & 0.84 EUR and 1 INR = 0.011 Eur
 // It returns 0.011 , with numbers upto 6 decimal places
 function currencyValue(fromCurr, toCurr) {
