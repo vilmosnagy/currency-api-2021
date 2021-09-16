@@ -1,7 +1,6 @@
 const fs = require('fs-extra')
 const path = require('path')
 const fetch = require('node-fetch')
-const atob = require('atob');
 
 
 // spaces to be used for prettify/json.stringify
@@ -13,8 +12,8 @@ let topCryptoCurrency = ["BTC","ETH","ADA","BNB","USDT","XRP","SOL","DOT","DOGE"
 
 let currLink, cryptoLink
 if (process.env.CI) {
-  currLink = atob(process.env.secrets.CURRLINK)
-  cryptoLink = atob(process.env.secrets.CRYPTOLINK)
+  currLink = process.env.currlink
+  cryptoLink = process.env.cryptolink
 } else {
   [currLink, cryptoLink] = fs.readFileSync(path.join(__dirname, 'links.ini')).toString().split(/\r?\n/).map(e => e.trim())
 }
