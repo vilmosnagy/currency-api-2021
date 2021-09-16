@@ -13,8 +13,8 @@ let topCryptoCurrency = ["BTC","ETH","ADA","BNB","USDT","XRP","SOL","DOT","DOGE"
 
 let currLink, cryptoLink
 if (process.env.CI) {
-  currLink = atob(process.env.currlink)
-  cryptoLink = atob(process.env.cryptolink)
+  currLink = atob(process.env.secrets.currlink)
+  cryptoLink = atob(process.env.secrets.cryptolink)
 } else {
   [currLink, cryptoLink] = fs.readFileSync(path.join(__dirname, 'links.ini')).toString().split(/\r?\n/).map(e => e.trim())
 }
