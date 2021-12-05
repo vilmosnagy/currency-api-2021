@@ -8,6 +8,15 @@
 [![](https://data.jsdelivr.com/v1/package/gh/fawazahmed0/currency-api/badge/rank)](https://www.jsdelivr.com/package/gh/fawazahmed0/currency-api)
 [![Fetch-Currencies](https://github.com/fawazahmed0/currency-api/actions/workflows/run.yml/badge.svg)](https://github.com/fawazahmed0/currency-api/actions/workflows/run.yml)
 
+
+------------
+ 
+ <div style="display:flex;">
+    <div><h4 align="center"><a href="https://sendletters.pp.ua"><img src="https://github.com/fawazahmed0/tiger/raw/master/envelope.svg" width="250" alt="SendLetters Brand Image"></a><br>This API is Sponsored by SendLetters, the Easiest way to Send Letters & Documents <a href="https://sendletters.pp.ua">Physically Anywhere in the World</a>.</h4></div>
+</div>
+
+------------
+
 **In the name of God, who have guided me to do this work**
 
 
@@ -77,11 +86,8 @@ I would like to thank all the Supporters who have helped in supporting this tool
 - Fernando Toribio
 - Oleg Belozerov
 
-### Support:
-You can help support this Service by as little as $3, because this Service needs regular maintenance to keep it running.<br>
-[Support Link](https://bit.ly/2W9NLru)
 
-Also Please Star this repo by clicking on [:star: button](#) above [:arrow_upper_right:](#)
+Please Star this repo by clicking on [:star: button](#) above [:arrow_upper_right:](#)
 
 <br>
 <br>
