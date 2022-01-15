@@ -8,7 +8,7 @@ const indent = 4
 
 // By market capitalization
 // Ref: https://coinmarketcap.com/all/views/all/
-let topCryptoCurrency = ["BTC","ETH","ADA","BNB","USDT","XRP","SOL","DOT","DOGE","USDC","UNI","LUNA","LINK","AVAX","LTC","BUSD","BCH","ALGO","WBTC","ICP","MATIC","FIL","TRX","FTT","XLM","VET","ATOM","ETC","THETA","DAI"]
+let topCryptoCurrency = ["BTC","ETH","ADA","BNB","USDT","XRP","SOL","DOT","DOGE","USDC","UNI","LUNA","LINK","AVAX","LTC","BUSD","BCH","ALGO","WBTC","ICP","MATIC","FIL","TRX","FTT","XLM","VET","ATOM","ETC","THETA","DAI","XMR"]
 
 let currLink, cryptoLink
 if (process.env.CI) {
