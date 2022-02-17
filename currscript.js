@@ -101,8 +101,12 @@ async function getCurrData(){
 async function getCryptoData(){
   let response = await fetch(cryptoLink)
   let data = await response.json()
+  let cleanJSON = {}
+  for(let value of data.data)
+    cleanJSON[value.symbol] = value.quote.USD.price
+
   return Object.fromEntries(                                                           // Dividing value by 1 to convert to 1 USD as base rate
-    Object.entries(data.rates).filter(([k, v]) => topCryptoCurrency.includes(k)).map(([k,v])=>[k,1/v]) )
+    Object.entries(cleanJSON).filter(([k, v]) => topCryptoCurrency.includes(k)).map(([k,v])=>[k,1/v]) )
 }
 
 // convert object keys to lowercase and values to float
