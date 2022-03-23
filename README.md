@@ -66,6 +66,7 @@ The above formats also work for fallback i.e if `.min.json` link fails, you can 
 > Get the currency value for EUR to JPY:<br>
 [https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur/jpy.json](https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur/jpy.json "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur/jpy.json")
 
+### To Add New Crypto Currency: [See This](https://github.com/fawazahmed0/currency-api/issues/41)
 
 ### Any Issues: [Raise here](https://github.com/fawazahmed0/currency-api/issues/new "Raise here")
 
