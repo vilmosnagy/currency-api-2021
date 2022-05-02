@@ -74,5 +74,7 @@ jobs:
           git add --sparse -A
           git commit -m 'Update Currencies'
           git remote add origin "https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
+          git reflog expire --expire=now --all
+          git gc --prune=now --aggressive
           git push --force --all
           git push --force --tags
