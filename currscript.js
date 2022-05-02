@@ -39,6 +39,8 @@ async function begin() {
   // launch the browser
  // await launchBrowser()
 
+  const latestDir = path.join(__dirname, 'latest')
+
   const currJSON = await getCurrencies()
   // Get & Save All the available currencies in api
   const availCurrListObj = await getAvailCurrencyJSON(currJSON)
@@ -50,7 +52,6 @@ async function begin() {
 
   // Backup the latest currency files to today's date folder, for historical currency access
   const dateDir = path.join(__dirname, dateToday)
-  const latestDir = path.join(__dirname, 'latest')
   fs.mkdirSync(dateDir, {
       recursive: true
     })
