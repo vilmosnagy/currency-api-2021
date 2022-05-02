@@ -39,20 +39,6 @@ async function begin() {
   // launch the browser
  // await launchBrowser()
 
-  // Backup the latest currency files to date folder, for historical currency access
-  // Todays date
-  const date = new Date()
-  // Set the date to yesterday
-  date.setDate(date.getDate() - 1)
-  // Get yesterdays date in YYYY-MM-DD format
-  const dateYesterday = date.toISOString().substring(0, 10)
-  const dateDir = path.join(__dirname, dateYesterday)
-  const latestDir = path.join(__dirname, 'latest')
-  fs.mkdirSync(dateDir, {
-    recursive: true
-  })
-  fs.copySync(latestDir, dateDir)
-
   const currJSON = await getCurrencies()
   // Get & Save All the available currencies in api
   const availCurrListObj = await getAvailCurrencyJSON(currJSON)
@@ -61,6 +47,15 @@ async function begin() {
 
   // Generate API files
   await generateFiles(currJSON)
+
+  // Backup the latest currency files to today's date folder, for historical currency access
+  const dateDir = path.join(__dirname, dateToday)
+  const latestDir = path.join(__dirname, 'latest')
+  fs.mkdirSync(dateDir, {
+      recursive: true
+    })
+  fs.copySync(latestDir, dateDir)
+
   // Close the browser
 //  await browser.close()
 }
