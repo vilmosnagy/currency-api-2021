@@ -1,0 +1,41 @@
+name: bfg test
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for branch 1 and on start directory, command.txt file changes or by manually running the workflow from actions tab
+on:
+  schedule:
+    - cron: '0 0 * * *'  # every day at midnight
+
+  workflow_dispatch:
+
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: macos-12
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    
+      # Mirror clone
+      - name: Mirror clone
+        shell: bash
+        run: |
+          curl -o bfg.jar https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar
+          REPO="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
+          git clone --mirror $REPO
+          
+      # bfg
+      - name: bfg
+        shell: bash
+        run: |     
+          java -Xms2g -Xmx11g -jar bfg.jar -D *.json currency-api.git
+          
+      # git cleanup
+      - name: git cleanup
+        shell: bash
+        run: |         
+          cd currency-api.git
+          git reflog expire --expire=now --all && git gc --prune=now --aggressive
