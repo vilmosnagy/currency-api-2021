@@ -31,7 +31,7 @@ jobs:
       - name: bfg
         shell: bash
         run: |     
-          java -Xms2g -Xmx11g -jar bfg.jar -D *.json currency-api.git
+          java -Xms2g -Xmx11g -jar bfg.jar --delete-folders latest currency-api.git
           
       # git cleanup
       - name: git cleanup
