@@ -27,11 +27,23 @@ jobs:
         shell: bash
         run: |
           REPO="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
-          git clone --filter=blob:none --no-checkout --depth 1  --sparse $REPO .
-          git sparse-checkout add 'latest/*'
+          git clone --no-checkout --sparse $REPO .
+          git sparse-checkout add 'latest/*' \'`date -u +"%Y-%m-%d" --date='-1 year -5 month -10 day'`/*\'
           git checkout
 
+      # Install git-filter-repo
+      - name: Install git-filter-repo
+        shell: bash
+        run: |
+          brew install git-filter-repo
 
+      # Delete old folders
+      - name: Delete old folders
+        shell: bash
+        run: |
+          git remote -v
+          git filter-repo --force --invert-paths --path `date -u +"%Y-%m-%d" --date='-1 year -5 month -10 day'`
+          
       - name: Get cache directory for npm
         id: cache-dir
         shell: bash
@@ -58,7 +70,8 @@ jobs:
         run: |
           git config --global user.email github-actions@github.com
           git config --global user.name github-actions
-          git pull
           git add --sparse -A
           git commit -m 'Update Currencies'
-          git push
+          git remote add origin ${{ github.repositoryUrl }}
+          git push --force --all
+          git push --force --tags
