@@ -73,6 +73,6 @@ jobs:
           git config --global user.name github-actions
           git add --sparse -A
           git commit -m 'Update Currencies'
-          git remote add origin ${{ github.repositoryUrl }}
+          git remote add origin "https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
           git push --force --all
           git push --force --tags
