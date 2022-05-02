@@ -28,7 +28,7 @@
 `date`
 
 The date should either be `latest` or in `YYYY-MM-DD` format <br>
-**Note:** Historical rates before `2020-11-22` are not available
+**Note:** Historical rates are only available for last 1 year and some dates may [be missing](https://github.com/fawazahmed0/currency-api/issues/32)
 
 The Endpoints Supports HTTP GET Method and returns the data in two formats:
 
