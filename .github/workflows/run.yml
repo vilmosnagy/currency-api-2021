@@ -69,6 +69,9 @@ jobs:
       - name: commit and push
         shell: bash
         run: |
+          export GIT_TRACE_PACKET=1
+          export GIT_TRACE=1
+          export GIT_CURL_VERBOSE=1
           git config --global user.email github-actions@github.com
           git config --global user.name github-actions
           git config --global gc.auto 0
@@ -76,7 +79,7 @@ jobs:
           git config --global http.postBuffer 2147483648
           git add --sparse -A
           git commit -m 'Update Currencies'
-          git remote add origin "https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
+          git remote add origin ${{ github.repositoryUrl }}
           git reflog expire --expire=now --all
           git gc --prune=now --aggressive
           git push --force --all
