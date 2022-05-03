@@ -26,25 +26,12 @@ jobs:
       - name: Partial clone
         shell: bash
         run: |
-          brew install coreutils
           REPO="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
-          git clone --no-checkout --sparse $REPO .
-          git sparse-checkout add 'latest/*' \'`gdate -u +"%Y-%m-%d" --date='-1 year -5 month -10 day'`/*\'
+          git clone --filter=blob:none --no-checkout --depth 1  --sparse $REPO .
+          git sparse-checkout add 'latest/*'
           git checkout
 
-      # Install git-filter-repo
-      - name: Install git-filter-repo
-        shell: bash
-        run: |
-          brew install git-filter-repo
 
-      # Delete old folders
-      - name: Delete old folders
-        shell: bash
-        run: |
-          git remote -v
-          git filter-repo --force --invert-paths --path `gdate -u +"%Y-%m-%d" --date='-1 year -5 month -10 day'`
-          
       - name: Get cache directory for npm
         id: cache-dir
         shell: bash
@@ -69,18 +56,9 @@ jobs:
       - name: commit and push
         shell: bash
         run: |
-          export GIT_TRACE_PACKET=1
-          export GIT_TRACE=1
-          export GIT_CURL_VERBOSE=1
           git config --global user.email github-actions@github.com
           git config --global user.name github-actions
-          git config --global gc.auto 0
-          git config --global gc.autodetach false
-          git config --global http.postBuffer 2147483648
+          git pull
           git add --sparse -A
           git commit -m 'Update Currencies'
-          git remote add origin ${{ github.repositoryUrl }}
-          git reflog expire --expire=now --all
-          git gc --prune=now --aggressive
-          git push --force --all
-          git push --force --tags
+          git push
