@@ -21,13 +21,8 @@
       >
     </div>
     <strong>
-              This work is Sponsored by SendLetter, the Cheapest way to Send Letters, Documents <a href="https://sendletter.org">physically anywhere in the world</a> with the click of a button.
-
-Upload your PDF & we will print the pages in high quality and send it to the destination address.
-
-Our prices are cheapest in the world, starting at $1, you cannot get prices lower than this from anywhere else.
-
-You can use our service to send Forms, Documents, Invoices, Statements, Letters, Invitations, Posters, Flyers, Handwritten letters to your friends, Thank You letters to customers and for many more things.
+              Sponsored by SendLetter, the Cheapest and Easiest way to Send Documents, Letters, Forms, Statements, Invoices, Invitations, Posters, Flyers, Handwritten Letters to anywhere in the World, starting at $1<br><br>
+      
 
 Visit [SendLetter.org](https://sendletter.org) to Send Now! And Save your Time and Money.
     </strong>
