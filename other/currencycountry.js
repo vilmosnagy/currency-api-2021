@@ -12,8 +12,11 @@ let bigJSON = {}
 for(let [countryName, currencyName, currencyCode, currencyNumber] of currencyArr){
     try{
     let [iso2,iso3,isoNumeric] = countryObj[countryName]
+    if(iso2 in bigJSON)
+    console.log(countryName)
+    else
     bigJSON[iso2] = {"country_name": countryName, "country_iso3":iso3, "country_iso_numeric":isoNumeric ,"currency_name": currencyName, "currency_code": currencyCode, "currency_number": currencyNumber}
-    }catch(e){console.error(e); console.log(countryName)}
+    }catch(e){}
 }
 
 fs.writeFileSync(path.join(__dirname, 'bigJSON.json'), JSON.stringify(bigJSON, null, '\t'))

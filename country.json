@@ -195,17 +195,17 @@
 		"country_name": "bhutan",
 		"country_iso3": "btn",
 		"country_iso_numeric": "64",
-		"currency_name": "indian rupee",
-		"currency_code": "inr",
-		"currency_number": "356"
+		"currency_name": "ngultrum",
+		"currency_code": "btn",
+		"currency_number": "64"
 	},
 	"bo": {
 		"country_name": "bolivia (plurinational state of)",
 		"country_iso3": "bol",
 		"country_iso_numeric": "68",
-		"currency_name": "mvdol",
-		"currency_code": "bov",
-		"currency_number": "984"
+		"currency_name": "boliviano",
+		"currency_code": "bob",
+		"currency_number": "68"
 	},
 	" sint eustatius and saba": {
 		"country_name": "bonaire",
@@ -379,9 +379,9 @@
 		"country_name": "colombia",
 		"country_iso3": "col",
 		"country_iso_numeric": "170",
-		"currency_name": "unidad de valor real",
-		"currency_code": "cou",
-		"currency_number": "970"
+		"currency_name": "colombian peso",
+		"currency_code": "cop",
+		"currency_number": "170"
 	},
 	"km": {
 		"country_name": "comoros (the)",
@@ -517,7 +517,7 @@
 		"country_iso_numeric": "222",
 		"currency_name": "us dollar",
 		"currency_code": "usd",
-		"currency_number": "840"
+		"currency_number": "840"	
 	},
 	"gq": {
 		"country_name": "equatorial guinea",
@@ -747,9 +747,9 @@
 		"country_name": "haiti",
 		"country_iso3": "hti",
 		"country_iso_numeric": "332",
-		"currency_name": "us dollar",
-		"currency_code": "usd",
-		"currency_number": "840"
+		"currency_name": "gourde",
+		"currency_code": "htg",
+		"currency_number": "332"
 	},
 	"hm": {
 		"country_name": "heard island and mcdonald islands",
@@ -963,9 +963,9 @@
 		"country_name": "lesotho",
 		"country_iso3": "lso",
 		"country_iso_numeric": "426",
-		"currency_name": "rand",
-		"currency_code": "zar",
-		"currency_number": "710"
+		"currency_name": "loti",
+		"currency_code": "lsl",
+		"currency_number": "426"
 	},
 	"lr": {
 		"country_name": "liberia",
@@ -1107,9 +1107,9 @@
 		"country_name": "mexico",
 		"country_iso3": "mex",
 		"country_iso_numeric": "484",
-		"currency_name": "mexican unidad de inversion (udi)",
-		"currency_code": "mxv",
-		"currency_number": "979"
+		"currency_name": "mexican peso",
+		"currency_code": "mxn",
+		"currency_number": "484"
 	},
 	"fm": {
 		"country_name": "micronesia (federated states of)",
@@ -1187,9 +1187,9 @@
 		"country_name": "namibia",
 		"country_iso3": "nam",
 		"country_iso_numeric": "516",
-		"currency_name": "rand",
-		"currency_code": "zar",
-		"currency_number": "710"
+		"currency_name": "namibia dollar",
+		"currency_code": "nad",
+		"currency_number": "516"
 	},
 	"nr": {
 		"country_name": "nauru",
@@ -1323,9 +1323,9 @@
 		"country_name": "panama",
 		"country_iso3": "pan",
 		"country_iso_numeric": "591",
-		"currency_name": "us dollar",
-		"currency_code": "usd",
-		"currency_number": "840"
+		"currency_name": "balboa",
+		"currency_code": "pab",
+		"currency_number": "590"
 	},
 	"pg": {
 		"country_name": "papua new guinea",
@@ -1683,9 +1683,9 @@
 		"country_name": "switzerland",
 		"country_iso3": "che",
 		"country_iso_numeric": "756",
-		"currency_name": "wir franc",
-		"currency_code": "chw",
-		"currency_number": "948"
+		"currency_name": "swiss franc",
+		"currency_code": "chf",
+		"currency_number": "756"
 	},
 	"sy": {
 		"country_name": "syrian arab republic",
@@ -1851,9 +1851,9 @@
 		"country_name": "united states of america (the)",
 		"country_iso3": "usa",
 		"country_iso_numeric": "840",
-		"currency_name": "us dollar (next day)",
-		"currency_code": "usn",
-		"currency_number": "997"
+		"currency_name": "us dollar",
+		"currency_code": "usd",
+		"currency_number": "840"
 	},
 	"uy": {
 		"country_name": "uruguay",
@@ -1884,8 +1884,8 @@
 		"country_iso3": "ven",
 		"country_iso_numeric": "862",
 		"currency_name": "bolivar",
-		"currency_code": "ved",
-		"currency_number": "926"
+		"currency_code": "vef",
+		"currency_number": "937"
 	},
 	"vn": {
 		"country_name": "viet nam",
@@ -1952,7 +1952,7 @@
 		"currency_number": "932"
 	},
 	"ax": {
-		"country_name": "�land islands",
+		"country_name": "Åland islands",
 		"country_iso3": "ala",
 		"country_iso_numeric": "248",
 		"currency_name": "euro",
