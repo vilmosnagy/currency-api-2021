@@ -96,10 +96,7 @@ I would like to thank all the Supporters who have helped in supporting this tool
 
 - Shaheen Alhumaydhi 
 - Kaushal Parashar
-- Lury Williams
-- Fernando Toribio
-- Oleg Belozerov
-
+- [More](https://github.com/fawazahmed0/currency-api/blob/1/DONOR.md)
 
 Please Star this repo by clicking on [:star: button](#) above [:arrow_upper_right:](#)
 
