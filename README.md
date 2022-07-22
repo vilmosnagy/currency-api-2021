@@ -102,7 +102,7 @@ I would like to thank all the Supporters who have donated:<br>
 - Kaushal Parashar
 - [Old Donors](https://github.com/fawazahmed0/currency-api/blob/1/DONOR.md)
 
-Support: [Link](https://github.com/sponsors/fawazahmed0)
+### Donate ❤️: [Here](https://github.com/sponsors/fawazahmed0)
 
 Please Star this repo by clicking on [:star: button](#) above [:arrow_upper_right:](#)
 
