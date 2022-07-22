@@ -92,11 +92,11 @@ The above formats also work for fallback i.e if `.min.json` link fails, you can 
 ### Any Issues: [Raise here](https://github.com/fawazahmed0/currency-api/issues/new "Raise here")
 
 ### Supporters 🎉:
-I would like to thank all the Supporters who have helped in supporting this tool:<br>
+I would like to thank all the Supporters who have donated:<br>
 
 - Shaheen Alhumaydhi 
 - Kaushal Parashar
-- [More](https://github.com/fawazahmed0/currency-api/blob/1/DONOR.md)
+- [Old Donors](https://github.com/fawazahmed0/currency-api/blob/1/DONOR.md)
 
 Please Star this repo by clicking on [:star: button](#) above [:arrow_upper_right:](#)
 
