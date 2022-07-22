@@ -30,6 +30,10 @@ Visit [SendLetter.org](https://sendletter.org/?r=cur) to know more
 
 ------------ 
 
+You can help support the open source work by donating at [here](https://github.com/sponsors/fawazahmed0)
+
+------------
+
 **In the name of God, who have guided me to do this work**
 
 
@@ -97,6 +101,8 @@ I would like to thank all the Supporters who have donated:<br>
 - Shaheen Alhumaydhi 
 - Kaushal Parashar
 - [Old Donors](https://github.com/fawazahmed0/currency-api/blob/1/DONOR.md)
+
+Support: [Link](https://github.com/sponsors/fawazahmed0)
 
 Please Star this repo by clicking on [:star: button](#) above [:arrow_upper_right:](#)
 
