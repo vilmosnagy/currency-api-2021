@@ -30,10 +30,6 @@ Visit [SendLetter.org](https://sendletter.org/?r=cur) to know more
 
 ------------ 
 
-You can help support the open source work by donating at [here](https://github.com/sponsors/fawazahmed0)
-
-------------
-
 **In the name of God, who have guided me to do this work**
 
 
