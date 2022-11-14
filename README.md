@@ -8,28 +8,7 @@
 [![](https://data.jsdelivr.com/v1/package/gh/fawazahmed0/currency-api/badge/rank)](https://www.jsdelivr.com/package/gh/fawazahmed0/currency-api)
 [![Fetch-Currencies](https://github.com/fawazahmed0/currency-api/actions/workflows/run.yml/badge.svg)](https://github.com/fawazahmed0/currency-api/actions/workflows/run.yml)
 
-------------
 
-
-<div style="display: flex">
-  <div>
-    <div align="center">
-      <a href="https://sendletter.org/?r=cur"
-        ><img
-          src="https://sendletter.org/original-icon.svg"
-          width="150"
-          alt="SendLetter Brand Image" /></a>
-    </div>
-  </div>
-</div>
-
-**Note:**  I would like to tell you about [SendLetter.org](https://sendletter.org/?r=cur), you can use it to Snail Mail 🐌 Forms, Documents, Letters 📄, Invoices, Statements, Invitations, Posters, Flyers, to anywhere in the world.
-Have Documents Printed 🖨, Folded and Mailed by them 📮, starting at $1
-
-Visit [SendLetter.org](https://sendletter.org/?r=cur) to know more
-
-
------------- 
 
 **In the name of God, who has guided me to do this work**
 
@@ -91,17 +70,6 @@ The above formats also work for fallback i.e if `.min.json` link fails, you can 
 ### To Add New Crypto Currency: [See This](https://github.com/fawazahmed0/currency-api/issues/41)
 
 ### Any Issues: [Raise here](https://github.com/fawazahmed0/currency-api/issues/new "Raise here")
-
-### Supporters 🎉:
-I would like to thank all the Supporters who have donated:<br>
-
-- Shaheen Alhumaydhi 
-- Kaushal Parashar
-- [Old Donors](https://github.com/fawazahmed0/currency-api/blob/1/DONOR.md)
-
-### Donate ❤️:
-- [Custom Page](https://fawazahmed0.github.io/donate)
-- [Github Sponsors](https://github.com/sponsors/fawazahmed0)
 
 Please Star this repo by clicking on [:star: button](#) above [:arrow_upper_right:](#)
 
